@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My first Chartist Tests</title>
-    <link rel="stylesheet"
-          href="bower_components/chartist/dist/chartist.min.css">
+    <title>Personal Finance Chart</title>
     <script src="bower_components/papaparse/papaparse.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   </head>
   <body>
-    <!-- Site content goes here !-->
-    <script src="bower_components/chartist/dist/chartist.min.js"></script>
-      
-    </div>
+
     CSV file:<input type="file" id="file-input" onchange="readBawagpskCSVandUpdateChart()"></input>
     Current Balance: <input type="text" id="balance-input" style="width:70px" onchange="readBawagpskCSVandUpdateChart()"></input>
-    <div class="ct-chart ct-octave" id="chart">
+
+    <div id="linechart-dailybalance"></div>
+
     <script>
+
+      var lineChart;
+
+      google.charts.load('current', {packages: ['line']});
+      google.charts.setOnLoadCallback(function() {
+        // new linechart without content (height will be 0)
+        lineChart = new google.charts.Line(document.getElementById('linechart-dailybalance'));
+      });
 
       var data = {
         correction: 0,
@@ -49,6 +55,7 @@
       var bookingsToDailyBalances = function(bookings, startBalance) {
         // takes a list of bookings (and an optional start balance) and returns daily account balances
         // (up until today)
+        // format: [{date:..., balance:...}, {date:..., balance:...}, ...]
         var previousBalance = startBalance || 0;
         var dailyBalances = [];
         // index of the last unprocessed booking
@@ -69,19 +76,26 @@
       }
 
       var updateChartFromDailyBalances = function(dailyBalances) {
-        var labels = [];
-        var balances = [];
-        for (var i = 0; i < dailyBalances.length; i ++) {
-          labels.push(dailyBalances[i].date.toISOString().slice(0, 10));
-          balances.push(dailyBalances[i].balance);
-        }
-        var data = {labels: labels, series: [balances]};
-        new Chartist.Line('.ct-chart', data, {
-          lineSmooth: Chartist.Interpolation.none({fillHoles: false}),
-          showPoint: false,
-          axisX: {showGrid: false, showLabel: false}
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Balance');
+        var rows = [];
+        dailyBalances.forEach(function(element, index) {
+          rows.push([element.date, element.balance]);
         });
-      };
+        data.addRows(rows);
+        var options = {
+          chart: {
+            title: 'Account balance'
+          },
+          width: 900,
+          height: 500,
+          // these actually don't work in material design charts for now
+          enableInteractivity: false,
+          tooltip: {trigger: 'selection'}
+        };
+        lineChart.draw(data, options);
+      }
 
       var correctDailyBalancesByAmount = function(dailyBalances, amount) {
         for (var i = 0; i < dailyBalances.length; i ++) {
@@ -99,7 +113,7 @@
             data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
             data.correction =
               parseFloat(document.getElementById('balance-input').value) -
-              data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
+              data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance || 0;
             data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, data.correction);
             updateChartFromDailyBalances(data.dailyBalances);
           }
