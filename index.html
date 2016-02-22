@@ -11,15 +11,18 @@
     Current Balance: <input type="text" id="balance-input" style="width:70px" onchange="readBawagpskCSVandUpdateChart()"></input>
 
     <div id="linechart-dailybalance"></div>
+    <div id="piechart"></div>
 
     <script>
 
       var lineChart;
+      var expenseChart;
 
-      google.charts.load('current', {packages: ['line']});
+      google.charts.load('current', {packages: ['line', 'corechart']});
       google.charts.setOnLoadCallback(function() {
         // new linechart without content (height will be 0)
         lineChart = new google.charts.Line(document.getElementById('linechart-dailybalance'));
+        expensesChart = new google.visualization.PieChart(document.getElementById('piechart'));
       });
 
       var data = {
@@ -118,6 +121,7 @@
             data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, data.correction);
             updateChartFromDailyBalances(data.dailyBalances);
             categorizeBookings();
+            drawExpensesChart();
           }
         });
       }
@@ -156,6 +160,40 @@
             booking.category = 'unknown_expense';
           }
         }
+      };
+
+      var getCategoryTotals = function() {
+        // get the total expense / income for each category
+        var categoryTotals = {};
+        // initialize all values to 0
+        keywords.forEach(function(keyword) {
+          categoryTotals[keyword[1]] = 0;
+        });
+        categoryTotals['unknown_income'] = 0;
+        categoryTotals['unknown_expense'] = 0;
+        data.bookings.forEach(function(booking) {
+          categoryTotals[booking.category] += booking.amount;
+        });
+        return categoryTotals;
+      };
+
+      var drawExpensesChart = function() {
+        var categoryTotals = getCategoryTotals();
+        var chartData = [['Category', 'Amount']];
+        for (var category in categoryTotals) {
+          if (categoryTotals[category] <= 0) {
+            chartData.push([category, -categoryTotals[category]]);
+          }
+        }
+        var chartDataTable = google.visualization.arrayToDataTable(chartData);
+        var options = {
+          title: 'Expenses',
+          width: 900,
+          height:600,
+          pieSliceText: 'label',
+          sliceVisibilityThreshold: 0
+        }
+        expensesChart.draw(chartDataTable, options);
       };
 
     </script>
