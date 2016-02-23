@@ -111,6 +111,7 @@
       var readBawagpskCSVandUpdateChart = function() {
         // parse the CSV file
         Papa.parse(document.getElementById('file-input').files[0], {
+          encoding: 'ISO-8859-1',
           delimiter: ';',
           complete: function(results) {
             data.bookings = prepareBawagpskBookingData(results.data);
