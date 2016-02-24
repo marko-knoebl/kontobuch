@@ -3,7 +3,8 @@
   <head>
     <title>Personal Finance Chart</title>
     <script src="bower_components/papaparse/papaparse.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="categories.js"></script>
   </head>
   <body>
 
@@ -29,7 +30,8 @@
         correction: 0,
         bookings: null,
         dailyBalancesBaseZero: null,
-        dailyBalances: null
+        dailyBalances: null,
+        keywordList: null
       };
 
       var addDays = function(date, days) {
@@ -79,7 +81,7 @@
         return dailyBalances;
       }
 
-      var updateChartFromDailyBalances = function(dailyBalances) {
+      var drawDailyBalanceChart = function(dailyBalances) {
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'Date');
         data.addColumn('number', 'Balance');
@@ -120,45 +122,37 @@
               parseFloat(document.getElementById('balance-input').value) -
               data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance || 0;
             data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, data.correction);
-            updateChartFromDailyBalances(data.dailyBalances);
+            drawDailyBalanceChart(data.dailyBalances);
             categorizeBookings();
             drawExpensesChart();
           }
         });
       }
 
-      var keywords = [
-        ['tankstelle', 'fuel'],
-        ['bezug', 'salary'],
-        ['billa', 'groceries'],
-        ['merkur', 'groceries'],
-        ['penny', 'groceries'],
-        ['zielpunkt', 'groceries'],
-        ['oebb', 'transportation'],
-        ['wr. linien', 'transportation'],
-        ['zinsen', 'interest'],
-        ['obi bau', 'housing'],
-        ['mobelix', 'housing'],
-        ['hartlauer', 'electronics'],
-        ['amazon', 'shopping'],
-        ['timberland', 'clothes']
-      ];
+      var getCategoryLookupTable = function(categories) {
+        var lookupTable = {};
+        categories.forEach(function(category) {
+          category.keywords.forEach(function(keyword) {
+            lookupTable[keyword] = category.name;
+          });
+        });
+        return lookupTable;
+      }
 
       var categorizeBookings = function() {
+        var lookupTable = getCategoryLookupTable(categories);
         // iterate over all bookings and add a "category" attribute
         for (var i = 0; i < data.bookings.length; i ++) {
           var booking = data.bookings[i];
-          keywords.forEach(function(keyword) {
-            var regex = new RegExp(keyword[0], 'i');
-            if (booking.details.search(regex) !== -1) {
-              booking.category = keyword[1];
-              return;
+          for (var keyword in lookupTable) {
+            var regex = new RegExp(keyword, 'i');
+            if (booking.details.search(regex) > -1) {
+              booking.category = lookupTable[keyword];
+              break;
             }
-          });
-          if (!booking.category && booking.amount >= 0) {
-            booking.category = 'unknown_income';
-          } else if (!booking.category && booking.amount < 0) {
-            booking.category = 'unknown_expense';
+          }
+          if (booking.category === undefined) {
+            booking.category = booking.amount > 0 ? 'unknown_income' : 'unknown_expense';
           }
         }
       };
@@ -167,9 +161,9 @@
         // get the total expense / income for each category
         var categoryTotals = {};
         // initialize all values to 0
-        keywords.forEach(function(keyword) {
-          categoryTotals[keyword[1]] = 0;
-        });
+        categories.forEach(function(category) {
+          categoryTotals[category.name] = 0;
+        })
         categoryTotals['unknown_income'] = 0;
         categoryTotals['unknown_expense'] = 0;
         data.bookings.forEach(function(booking) {
