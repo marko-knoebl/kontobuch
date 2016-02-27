@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <title>Personal Finance Chart</title>
     <script src="bower_components/papaparse/papaparse.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="categories.js"></script>
-  </head>
-  <body>
 
-    CSV file:<input type="file" id="file-input" onchange="readBawagpskCSVandUpdateChart()"></input>
-    Current Balance: <input type="text" id="balance-input" style="width:70px" onchange="readBawagpskCSVandUpdateChart()"></input>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <link rel="stylesheet" href="bower_components/angular/angular.css"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+  </head>
+  <body ng-app="MyFinances" ng-controller="MyFinancesCtrl">
+    <md-button ng-click="showNewAccountDialog()" class="md-raised md-primary" style="background-color:#990000">Add account</md-button>
 
     <div id="linechart-dailybalance"></div>
     <div id="piechart"></div>

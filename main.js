@@ -10,8 +10,32 @@ google.charts.setOnLoadCallback(function() {
   expensesChart = new google.visualization.PieChart(document.getElementById('piechart'));
 });
 
+var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']);
+
+myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
+  $scope.showNewAccountDialog = function(event){
+    $mdDialog.show({
+      templateUrl: 'template-new-account.html',
+      clickOutsideToClose: true,
+      controller: NewAccountDialogController,
+      // create a new child scope of the global angular scope
+      scope: $scope.$new(),
+      targetEvent: event
+    });
+  };
+});
+
+function NewAccountDialogController($scope, $mdDialog) {
+  $scope.processOKClicked = function() {
+    data.currentBalance = $scope.currentBalance;
+    //$scope.$parent.currentBalance = data.currentBalance;
+    readBawagpskCSVandUpdateChart();
+    $mdDialog.hide();
+  };
+};
+
 var data = {
-  correction: 0,
+  currentBalance: 0,
   bookings: null,
   dailyBalancesBaseZero: null,
   dailyBalances: null,
@@ -102,10 +126,8 @@ var readBawagpskCSVandUpdateChart = function() {
     complete: function(results) {
       data.bookings = prepareBawagpskBookingData(results.data);
       data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
-      data.correction =
-        parseFloat(document.getElementById('balance-input').value) -
-        data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance || 0;
-      data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, data.correction);
+      var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
+      data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
       drawDailyBalanceChart(data.dailyBalances);
       categorizeBookings();
       drawExpensesChart();
