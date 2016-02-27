@@ -13,11 +13,16 @@ google.charts.setOnLoadCallback(function() {
 var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']);
 
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
-  $scope.showNewAccountDialog = function(event){
+  $scope.showNewAccountDialog = function(event, bank) {
+    if (bank === 'bawagpsk') {
+      var controller = NewBawagpskAccountDialogController;
+    } else {
+      var controller = NewHellobankAccountDialogController;
+    }
     $mdDialog.show({
       templateUrl: 'template-new-account.html',
       clickOutsideToClose: true,
-      controller: NewAccountDialogController,
+      controller: controller,
       // create a new child scope of the global angular scope
       scope: $scope.$new(),
       targetEvent: event
@@ -25,14 +30,22 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
   };
 });
 
-function NewAccountDialogController($scope, $mdDialog) {
+function NewBawagpskAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
     //$scope.$parent.currentBalance = data.currentBalance;
-    readBawagpskCSVandUpdateChart();
+    readCSVandUpdateChart('bawagpsk');
     $mdDialog.hide();
   };
 };
+
+function NewHellobankAccountDialogController($scope, $mdDialog) {
+  $scope.processOKClicked = function() {
+    data.currentBalance = $scope.currentBalance;
+    readCSVandUpdateChart('hellobank');
+    $mdDialog.hide();
+  }
+}
 
 var data = {
   currentBalance: 0,
@@ -49,19 +62,23 @@ var addDays = function(date, days) {
   return result;
 };
 
-var prepareBawagpskBookingData = function(rawBookingData) {
-  // takes raw booking data (imported from Bawag PSK CSV) and returns a nicer format:
+var prepareBookingData = function(rawBookingData, bankName) {
+  // takes raw CSV booking data and returns a nicer format:
   // [
   //   {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
   //   {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
   // ]
+  var config = csvImportConfig[bankName];
   var bookingData = [];
   for (var i = rawBookingData.length-2; i >= 0; i --) {
-    var dayMonthYear = rawBookingData[i][2].split('.').reverse().join('-');
-    var isoDate = new Date(dayMonthYear + 'T12:00:00');
-    var amount = parseFloat(rawBookingData[i][4].replace('.', '').replace(',', '.'));
-    var details = rawBookingData[i][1];
-    bookingData.push({date: isoDate, amount: amount, details: details});
+    var date = rawBookingData[i][config.dateKey];
+    if (config.dateNormalizer) {
+      date = config.dateNormalizer(date);
+    }
+    date = new Date(date + 'T12:00:00');
+    var amount = parseFloat(rawBookingData[i][config.amountKey].replace('.', '').replace(',', '.'));
+    var details = rawBookingData[i][config.detailsKey];
+    bookingData.push({date: date, amount: amount, details: details});
   }
   return bookingData;
 };
@@ -118,22 +135,48 @@ var correctDailyBalancesByAmount = function(dailyBalances, amount) {
   return dailyBalances;
 };
 
-var readBawagpskCSVandUpdateChart = function() {
-  // parse the CSV file
-  Papa.parse(document.getElementById('file-input').files[0], {
+var updateDataAndCharts = function() {
+  // based on data.bookings and data.currentBalance,
+  // update all other data items and update the chart
+  data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
+  var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
+  data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
+  drawDailyBalanceChart(data.dailyBalances);
+  categorizeBookings();
+  drawExpensesChart();
+}
+
+var csvImportConfig = {
+  bawagpsk: {
     encoding: 'ISO-8859-1',
     delimiter: ';',
-    complete: function(results) {
-      data.bookings = prepareBawagpskBookingData(results.data);
-      data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
-      var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
-      data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
-      drawDailyBalanceChart(data.dailyBalances);
-      categorizeBookings();
-      drawExpensesChart();
-    }
-  });
+    header: false,
+    dateKey: 2,
+    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+    amountKey: 4,
+    detailsKey: 1
+  },
+  hellobank: {
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: true,
+    dateKey: 'Valutadatum',
+    amountKey: 'Betrag',
+    detailsKey: 'Umsatztext'
+  }
 }
+
+var readCSVandUpdateChart = function(bankName) {
+  Papa.parse(document.getElementById('file-input').files[0], {
+    encoding: csvImportConfig[bankName].encoding,
+    delimiter: csvImportConfig[bankName].delimiter,
+    header: csvImportConfig[bankName].header,
+    complete: function(results) {
+      data.bookings = prepareBookingData(results.data, bankName);
+      updateDataAndCharts();
+    }
+  })
+};
 
 var getCategoryLookupTable = function(categories) {
   var lookupTable = {};
