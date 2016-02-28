@@ -2,6 +2,8 @@
 
 /* jshint -W117 */
 
+// Charts setup
+
 var lineChart;
 var expensesChart;
 
@@ -13,6 +15,8 @@ google.charts.setOnLoadCallback(function() {
 });
 
 var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']);
+
+// Angular setup
 
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.showNewAccountDialog = function(event, bank) {
@@ -70,18 +74,22 @@ var data = {
 };
 
 var addDays = function(date, days) {
-  // add a number of days to a given date
+  /** add a number of days to a given date */
   var result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
 };
 
+/**
+ * Takes raw, bank-specific booking data and returns a nicer format:
+ *  [
+ *    {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
+ *    {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
+ *  ]
+ *  @param {Array} rawBookingData - Booking data in a bank-specific CSV form
+ *  @param {string} bankName - Name of the associated bank
+ */
 var prepareBookingData = function(rawBookingData, bankName) {
-  // takes raw CSV booking data and returns a nicer format:
-  // [
-  //   {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
-  //   {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
-  // ]
   var config = csvImportConfig[bankName];
   var bookingData = [];
   if (config.reverse) {
@@ -100,10 +108,14 @@ var prepareBookingData = function(rawBookingData, bankName) {
   return bookingData;
 };
 
+/**
+ * Takes a list of bookings and a start balance and returns daily
+ * account balances (up until today)
+ * format: [{date:..., balance:...}, {date:..., balance:...}, ...]
+ * @param {Array} bookings - Bookings (sorted by date)
+ * @param {Number} startBalance - Account balance before the first booking
+ */
 var bookingsToDailyBalances = function(bookings, startBalance) {
-  // takes a list of bookings (and an optional start balance) and returns daily account balances
-  // (up until today)
-  // format: [{date:..., balance:...}, {date:..., balance:...}, ...]
   var previousBalance = startBalance || 0;
   var dailyBalances = [];
   // index of the last unprocessed booking
@@ -123,6 +135,9 @@ var bookingsToDailyBalances = function(bookings, startBalance) {
   return dailyBalances;
 };
 
+/**
+ * Convert an array of daily balances to a Google data table.
+ */
 var dailyBalancesToDailyBalancesDataTable = function(dailyBalances) {
   var dataTable = new google.visualization.DataTable();
   dataTable.addColumn('date', 'Date');
@@ -135,6 +150,9 @@ var dailyBalancesToDailyBalancesDataTable = function(dailyBalances) {
   return dataTable;
 };
 
+/**
+ * Update the displayed chart with data provided in a Google data table
+ */
 var drawDailyBalanceChart = function(dailyBalancesGoogleDataTable) {
   var parentStyle = window.getComputedStyle(document.querySelector('#linechart-dailybalance').parentNode, null);
   var parentWidth = parseInt(parentStyle.getPropertyValue('width'));
@@ -156,6 +174,9 @@ window.addEventListener('resize', function() {
   drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
 });
 
+/**
+ * Add/subtract a certain amount to/from all daily balances
+ */
 var correctDailyBalancesByAmount = function(dailyBalances, amount) {
   for (var i = 0; i < dailyBalances.length; i ++) {
     dailyBalances[i].balance += amount;
@@ -163,9 +184,11 @@ var correctDailyBalancesByAmount = function(dailyBalances, amount) {
   return dailyBalances;
 };
 
+/**
+ * Based on data.bookings and data.currentBalance, update all
+ * other data items and update the chart.
+ */
 var updateDataAndCharts = function() {
-  // based on data.bookings and data.currentBalance,
-  // update all other data items and update the chart
   data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
   var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
   data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
@@ -175,6 +198,10 @@ var updateDataAndCharts = function() {
   drawExpensesChart();
 };
 
+/**
+ * Configuration data that describes how data from each individual
+ * bank can be imported
+ */
 var csvImportConfig = {
   bawagpsk: {
     encoding: 'ISO-8859-1',
@@ -206,6 +233,9 @@ var csvImportConfig = {
   }
 };
 
+/**
+ * Read CSV data and update charts accordingly
+ */
 var readCSVandUpdateChart = function(bankName) {
   Papa.parse(document.getElementById('file-input').files[0], {
     encoding: csvImportConfig[bankName].encoding,
@@ -219,6 +249,9 @@ var readCSVandUpdateChart = function(bankName) {
   });
 };
 
+/**
+ * Create a lookup table to associate keywords with a category
+ */
 var getCategoryLookupTable = function(categories) {
   var lookupTable = {};
   categories.forEach(function(category) {
@@ -229,9 +262,11 @@ var getCategoryLookupTable = function(categories) {
   return lookupTable;
 };
 
+/**
+ * Add a "category" attribute to all transactions
+ */
 var categorizeBookings = function() {
   var lookupTable = getCategoryLookupTable(categories);
-  // iterate over all bookings and add a "category" attribute
   for (var i = 0; i < data.bookings.length; i ++) {
     var booking = data.bookings[i];
     for (var keyword in lookupTable) {
@@ -247,8 +282,11 @@ var categorizeBookings = function() {
   }
 };
 
-var getCategoryTotals = function() {
-  // get the total expense / income for each category
+/**
+ * Given a list of transactions and a list of categories,
+ * get the total expenses / revenues for each category.
+ */
+var getCategoryTotals = function(bookings, categories) {
   var categoryTotals = {};
   // initialize all values to 0
   categories.forEach(function(category) {
@@ -262,8 +300,11 @@ var getCategoryTotals = function() {
   return categoryTotals;
 };
 
+/**
+ * Draw a pie chart of expense categories.
+ */
 var drawExpensesChart = function() {
-  var categoryTotals = getCategoryTotals();
+  var categoryTotals = getCategoryTotals(data.bookings, categories);
   var chartData = [['Category', 'Amount']];
   for (var category in categoryTotals) {
     if (categoryTotals[category] <= 0) {
