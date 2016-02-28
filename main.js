@@ -16,8 +16,10 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
   $scope.showNewAccountDialog = function(event, bank) {
     if (bank === 'bawagpsk') {
       var controller = NewBawagpskAccountDialogController;
-    } else {
+    } else if (bank === 'hellobank') {
       var controller = NewHellobankAccountDialogController;
+    } else if (bank === 'raiffeisen') {
+      var controller = NewRaiffeisenAccountDialogController;
     }
     $mdDialog.show({
       templateUrl: 'template-new-account.html',
@@ -47,6 +49,14 @@ function NewHellobankAccountDialogController($scope, $mdDialog) {
   }
 }
 
+function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
+  $scope.processOKClicked = function() {
+    data.currentBalance = $scope.currentBalance;
+    readCSVandUpdateChart('raiffeisen');
+    $mdDialog.hide();
+  }
+}
+
 var data = {
   currentBalance: 0,
   bookings: null,
@@ -70,7 +80,10 @@ var prepareBookingData = function(rawBookingData, bankName) {
   // ]
   var config = csvImportConfig[bankName];
   var bookingData = [];
-  for (var i = rawBookingData.length-2; i >= 0; i --) {
+  if (config.reverse) {
+    rawBookingData.reverse();
+  }
+  for (var i = 0; i <= rawBookingData.length-1; i ++) {
     var date = rawBookingData[i][config.dateKey];
     if (config.dateNormalizer) {
       date = config.dateNormalizer(date);
@@ -154,7 +167,8 @@ var csvImportConfig = {
     dateKey: 2,
     dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
     amountKey: 4,
-    detailsKey: 1
+    detailsKey: 1,
+    reverse: true
   },
   hellobank: {
     encoding: 'ISO-8859-1',
@@ -162,7 +176,17 @@ var csvImportConfig = {
     header: true,
     dateKey: 'Valutadatum',
     amountKey: 'Betrag',
-    detailsKey: 'Umsatztext'
+    detailsKey: 'Umsatztext',
+    reverse: true
+  },
+  raiffeisen: {
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: false,
+    dateKey: 0,
+    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+    amountKey: 3,
+    detailsKey: 1
   }
 }
 
@@ -171,6 +195,7 @@ var readCSVandUpdateChart = function(bankName) {
     encoding: csvImportConfig[bankName].encoding,
     delimiter: csvImportConfig[bankName].delimiter,
     header: csvImportConfig[bankName].header,
+    skipEmptyLines: true,
     complete: function(results) {
       data.bookings = prepareBookingData(results.data, bankName);
       updateDataAndCharts();
