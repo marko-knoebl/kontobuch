@@ -1,0 +1,29 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools"><h2>New account</h2></div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <div>
+        <p>We will now import your financial data from Raiffeisen.</p>
+        <p>Please log in to your <a href="https://banking.raiffeisen.at/" target="_blank">Raiffeisen eBanking</a> account.</p>
+      </div>
+      <div>
+        Enter your current account balance (Kontostand):<br>
+        <md-input-container style="margin-bottom:0px">
+          <label>Current Balance</label>
+          <input type="number" ng-model="currentBalance"/>
+        </md-input-container>
+      </div>
+      <div>
+        <p></p>
+        <p>Save the CSV file to your device and upload it below:</p>
+        <input type="file" id="file-input" style="margin-top:16px">
+      </div>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

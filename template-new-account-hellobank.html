@@ -1,0 +1,32 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools"><h2>New account</h2></div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <div>
+        <p>We will now import your financial data from Hellobank.</p>
+        <p>Please log in to the <a href="https://www.hellobank.at/" target="_blank">Hello Bank portal</a>.<br>Under <strong>Konto & Banking</strong>, select <strong>Finanzübersicht</strong>.<br>Click on the IBAN of your account to open the account overview.</p>
+      </div>
+      <div>
+        Enter your current account balance (Saldo):<br>
+        <md-input-container style="margin-bottom:0px">
+          <label>Current Balance</label>
+          <input type="number" ng-model="currentBalance"/>
+        </md-input-container>
+      </div>
+      <div>
+        <p>In the "Suche..." dropdown, select <strong>erweiterte Suche</strong>.<br>
+        Under <strong>Buchungsdatum von</strong>, select an early date in order to include all bookings.<br>
+        Click on <strong>Umsätze anzeigen</strong>.<br>
+        Finally, in the <strong>Druck/Export</strong> dropdown, select <strong>Textdatei/CSV</strong>.</p>
+        <p>Save the CSV file to your device and upload it below:</p>
+        <input type="file" id="file-input" style="margin-top:16px">
+      </div>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

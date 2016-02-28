@@ -22,7 +22,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
       var controller = NewRaiffeisenAccountDialogController;
     }
     $mdDialog.show({
-      templateUrl: 'template-new-account.html',
+      templateUrl: 'template-new-account-' + bank + '.html',
       clickOutsideToClose: true,
       controller: controller,
       // create a new child scope of the global angular scope
