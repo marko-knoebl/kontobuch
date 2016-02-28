@@ -2,68 +2,6 @@
 
 /* jshint -W117 */
 
-// Charts setup
-
-var lineChart;
-var expensesChart;
-
-google.charts.load('current', {packages: ['line', 'corechart']});
-google.charts.setOnLoadCallback(function() {
-  // new linechart without content (height will be 0)
-  lineChart = new google.charts.Line(document.getElementById('linechart-dailybalance'));
-  expensesChart = new google.visualization.PieChart(document.getElementById('piechart'));
-});
-
-var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']);
-
-// Angular setup
-
-myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
-  $scope.showNewAccountDialog = function(event, bank) {
-    var controller;
-    if (bank === 'bawagpsk') {
-      controller = NewBawagpskAccountDialogController;
-    } else if (bank === 'hellobank') {
-      controller = NewHellobankAccountDialogController;
-    } else if (bank === 'raiffeisen') {
-      controller = NewRaiffeisenAccountDialogController;
-    }
-    $mdDialog.show({
-      templateUrl: 'template-new-account-' + bank + '.html',
-      clickOutsideToClose: true,
-      controller: controller,
-      // create a new child scope of the global angular scope
-      scope: $scope.$new(),
-      targetEvent: event
-    });
-  };
-});
-
-function NewBawagpskAccountDialogController($scope, $mdDialog) {
-  $scope.processOKClicked = function() {
-    data.currentBalance = $scope.currentBalance;
-    //$scope.$parent.currentBalance = data.currentBalance;
-    readCSVandUpdateChart('bawagpsk');
-    $mdDialog.hide();
-  };
-}
-
-function NewHellobankAccountDialogController($scope, $mdDialog) {
-  $scope.processOKClicked = function() {
-    data.currentBalance = $scope.currentBalance;
-    readCSVandUpdateChart('hellobank');
-    $mdDialog.hide();
-  };
-}
-
-function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
-  $scope.processOKClicked = function() {
-    data.currentBalance = $scope.currentBalance;
-    readCSVandUpdateChart('raiffeisen');
-    $mdDialog.hide();
-  };
-}
-
 var data = {
   currentBalance: 0,
   bookings: null,
@@ -71,6 +9,41 @@ var data = {
   dailyBalances: null,
   dailyBalancesGoogleDataTable: null,
   keywordList: null
+};
+
+/**
+ * Configuration data that describes how data from each individual
+ * bank can be imported
+ */
+var csvImportConfig = {
+  bawagpsk: {
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: false,
+    dateKey: 2,
+    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+    amountKey: 4,
+    detailsKey: 1,
+    reverse: true
+  },
+  hellobank: {
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: true,
+    dateKey: 'Valutadatum',
+    amountKey: 'Betrag',
+    detailsKey: 'Umsatztext',
+    reverse: true
+  },
+  raiffeisen: {
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: false,
+    dateKey: 0,
+    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+    amountKey: 3,
+    detailsKey: 1
+  }
 };
 
 var addDays = function(date, days) {
@@ -136,45 +109,6 @@ var bookingsToDailyBalances = function(bookings, startBalance) {
 };
 
 /**
- * Convert an array of daily balances to a Google data table.
- */
-var dailyBalancesToDailyBalancesDataTable = function(dailyBalances) {
-  var dataTable = new google.visualization.DataTable();
-  dataTable.addColumn('date', 'Date');
-  dataTable.addColumn('number', 'Balance');
-  var rows = [];
-  data.dailyBalances.forEach(function(element, index) {
-    rows.push([element.date, element.balance]);
-  });
-  dataTable.addRows(rows);
-  return dataTable;
-};
-
-/**
- * Update the displayed chart with data provided in a Google data table
- */
-var drawDailyBalanceChart = function(dailyBalancesGoogleDataTable) {
-  var parentStyle = window.getComputedStyle(document.querySelector('#linechart-dailybalance').parentNode, null);
-  var parentWidth = parseInt(parentStyle.getPropertyValue('width'));
-  var parentHeight = parseInt(parentStyle.getPropertyValue('height'));
-  var options = {
-    chart: {
-      title: 'Account balance'
-    },
-    width: parentWidth-32,
-    height: parentHeight-40,
-    // these actually don't work in material design charts for now
-    enableInteractivity: false,
-    tooltip: {trigger: 'selection'}
-  };
-  lineChart.draw(dailyBalancesGoogleDataTable, options);
-};
-
-window.addEventListener('resize', function() {
-  drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
-});
-
-/**
  * Add/subtract a certain amount to/from all daily balances
  */
 var correctDailyBalancesByAmount = function(dailyBalances, amount) {
@@ -186,51 +120,13 @@ var correctDailyBalancesByAmount = function(dailyBalances, amount) {
 
 /**
  * Based on data.bookings and data.currentBalance, update all
- * other data items and update the chart.
+ * other data items.
  */
-var updateDataAndCharts = function() {
+var updateData = function() {
   data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
   var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
   data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
-  data.dailyBalancesGoogleDataTable = dailyBalancesToDailyBalancesDataTable();
-  drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
   categorizeBookings();
-  drawExpensesChart();
-};
-
-/**
- * Configuration data that describes how data from each individual
- * bank can be imported
- */
-var csvImportConfig = {
-  bawagpsk: {
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: false,
-    dateKey: 2,
-    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-    amountKey: 4,
-    detailsKey: 1,
-    reverse: true
-  },
-  hellobank: {
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: true,
-    dateKey: 'Valutadatum',
-    amountKey: 'Betrag',
-    detailsKey: 'Umsatztext',
-    reverse: true
-  },
-  raiffeisen: {
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: false,
-    dateKey: 0,
-    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-    amountKey: 3,
-    detailsKey: 1
-  }
 };
 
 /**
@@ -244,7 +140,10 @@ var readCSVandUpdateChart = function(bankName) {
     skipEmptyLines: true,
     complete: function(results) {
       data.bookings = prepareBookingData(results.data, bankName);
-      updateDataAndCharts();
+      updateData();
+      data.dailyBalancesGoogleDataTable = dailyBalancesToDailyBalancesDataTable();
+      drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
+      drawExpensesChart();
     }
   });
 };
@@ -298,26 +197,4 @@ var getCategoryTotals = function(bookings, categories) {
     categoryTotals[booking.category] += booking.amount;
   });
   return categoryTotals;
-};
-
-/**
- * Draw a pie chart of expense categories.
- */
-var drawExpensesChart = function() {
-  var categoryTotals = getCategoryTotals(data.bookings, categories);
-  var chartData = [['Category', 'Amount']];
-  for (var category in categoryTotals) {
-    if (categoryTotals[category] <= 0) {
-      chartData.push([category, -categoryTotals[category]]);
-    }
-  }
-  var chartDataTable = google.visualization.arrayToDataTable(chartData);
-  var options = {
-    title: 'Expenses',
-    width: 900,
-    height:600,
-    pieSliceText: 'label',
-    sliceVisibilityThreshold: 0
-  };
-  expensesChart.draw(chartDataTable, options);
 };
