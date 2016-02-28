@@ -23,7 +23,7 @@ var categories = [
 	},
 	{
 		name: 'housing',
-		keywords: ['miete', 'wohnung', 'obi bau', 'mobelix', 'ikea', 'kika', 'xxxlutz']
+		keywords: ['miete', 'wohnung', 'obi bau', 'mobelix', 'ikea', 'kika', 'xxxlutz', 'Energie Burgenland']
 	},
 	{
 		name: 'electronics',
@@ -35,11 +35,11 @@ var categories = [
 	},
 	{
 		name: 'clothes',
-		keywords: ['timberland', 'green ground', 'ebenberg', 'gea', 'outlet\\\\parndorf',]
+		keywords: ['timberland', 'green ground', 'ebenberg', 'gea', 'outlet\\\\parndorf', 'deichmann']
 	},
 	{
 		name: 'fuel',
-		keywords: ['omv', 'tankstelle', 'eni servicestation', 'bp']
+		keywords: ['omv', 'tankstelle', 'eni servicestation', ' bp ']
 	},
 	{
 		name: 'books',
@@ -51,11 +51,15 @@ var categories = [
 	},
 	{
 		name: 'phone',
-		keywords: ['telekom austria']
+		keywords: ['telekom austria', 'Hutchison Drei']
 	},
 	{
 		name: 'atm',
-		keywords: ['auszahlung']
+		keywords: ['auszahlung', 'ATM ', 'SB-BEHEBUNG', 'AUTOMAT']
+	},
+	{
+		name: 'credit_card',
+		keywords: ['Diners Club Kontoauszug']
 	},
 	{
 		name: 'travel',
@@ -68,5 +72,17 @@ var categories = [
 	{
 		name: 'taxes',
 		keywords: ['sozialvers']
+	},
+	{
+		name: 'investment',
+		keywords: ['Fondsgebundene Lebensversicherung']
+	},
+	{
+		name: 'insurance',
+		keywords: ['Österreichische Beamtenversicherung']
+	},
+	{
+		name: 'presents',
+		keywords: ['Geburtstagsgeschenk']
 	}
 ];
