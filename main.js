@@ -65,6 +65,7 @@ var data = {
   bookings: null,
   dailyBalancesBaseZero: null,
   dailyBalances: null,
+  dailyBalancesGoogleDataTable: null,
   keywordList: null
 };
 
@@ -122,27 +123,38 @@ var bookingsToDailyBalances = function(bookings, startBalance) {
   return dailyBalances;
 };
 
-var drawDailyBalanceChart = function(dailyBalances) {
-  var data = new google.visualization.DataTable();
-  data.addColumn('date', 'Date');
-  data.addColumn('number', 'Balance');
+var dailyBalancesToDailyBalancesDataTable = function(dailyBalances) {
+  var dataTable = new google.visualization.DataTable();
+  dataTable.addColumn('date', 'Date');
+  dataTable.addColumn('number', 'Balance');
   var rows = [];
-  dailyBalances.forEach(function(element, index) {
+  data.dailyBalances.forEach(function(element, index) {
     rows.push([element.date, element.balance]);
   });
-  data.addRows(rows);
+  dataTable.addRows(rows);
+  return dataTable;
+};
+
+var drawDailyBalanceChart = function(dailyBalancesGoogleDataTable) {
+  var parentStyle = window.getComputedStyle(document.querySelector('#linechart-dailybalance').parentNode, null);
+  var parentWidth = parseInt(parentStyle.getPropertyValue('width'));
+  var parentHeight = parseInt(parentStyle.getPropertyValue('height'));
   var options = {
     chart: {
       title: 'Account balance'
     },
-    width: 900,
-    height: 500,
+    width: parentWidth-32,
+    height: parentHeight-40,
     // these actually don't work in material design charts for now
     enableInteractivity: false,
     tooltip: {trigger: 'selection'}
   };
-  lineChart.draw(data, options);
+  lineChart.draw(dailyBalancesGoogleDataTable, options);
 };
+
+window.addEventListener('resize', function() {
+  drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
+});
 
 var correctDailyBalancesByAmount = function(dailyBalances, amount) {
   for (var i = 0; i < dailyBalances.length; i ++) {
@@ -157,7 +169,8 @@ var updateDataAndCharts = function() {
   data.dailyBalancesBaseZero = bookingsToDailyBalances(data.bookings);
   var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
   data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
-  drawDailyBalanceChart(data.dailyBalances);
+  data.dailyBalancesGoogleDataTable = dailyBalancesToDailyBalancesDataTable();
+  drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
   categorizeBookings();
   drawExpensesChart();
 };
