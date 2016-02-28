@@ -1,5 +1,7 @@
 "use strict";
 
+/* jshint -W117 */
+
 var lineChart;
 var expensesChart;
 
@@ -14,12 +16,13 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']
 
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.showNewAccountDialog = function(event, bank) {
+    var controller;
     if (bank === 'bawagpsk') {
-      var controller = NewBawagpskAccountDialogController;
+      controller = NewBawagpskAccountDialogController;
     } else if (bank === 'hellobank') {
-      var controller = NewHellobankAccountDialogController;
+      controller = NewHellobankAccountDialogController;
     } else if (bank === 'raiffeisen') {
-      var controller = NewRaiffeisenAccountDialogController;
+      controller = NewRaiffeisenAccountDialogController;
     }
     $mdDialog.show({
       templateUrl: 'template-new-account-' + bank + '.html',
@@ -39,14 +42,14 @@ function NewBawagpskAccountDialogController($scope, $mdDialog) {
     readCSVandUpdateChart('bawagpsk');
     $mdDialog.hide();
   };
-};
+}
 
 function NewHellobankAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
     readCSVandUpdateChart('hellobank');
     $mdDialog.hide();
-  }
+  };
 }
 
 function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
@@ -54,7 +57,7 @@ function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
     data.currentBalance = $scope.currentBalance;
     readCSVandUpdateChart('raiffeisen');
     $mdDialog.hide();
-  }
+  };
 }
 
 var data = {
@@ -117,7 +120,7 @@ var bookingsToDailyBalances = function(bookings, startBalance) {
     dailyBalances.push({date: date, balance: previousBalance});
   }
   return dailyBalances;
-}
+};
 
 var drawDailyBalanceChart = function(dailyBalances) {
   var data = new google.visualization.DataTable();
@@ -139,7 +142,7 @@ var drawDailyBalanceChart = function(dailyBalances) {
     tooltip: {trigger: 'selection'}
   };
   lineChart.draw(data, options);
-}
+};
 
 var correctDailyBalancesByAmount = function(dailyBalances, amount) {
   for (var i = 0; i < dailyBalances.length; i ++) {
@@ -157,7 +160,7 @@ var updateDataAndCharts = function() {
   drawDailyBalanceChart(data.dailyBalances);
   categorizeBookings();
   drawExpensesChart();
-}
+};
 
 var csvImportConfig = {
   bawagpsk: {
@@ -188,7 +191,7 @@ var csvImportConfig = {
     amountKey: 3,
     detailsKey: 1
   }
-}
+};
 
 var readCSVandUpdateChart = function(bankName) {
   Papa.parse(document.getElementById('file-input').files[0], {
@@ -200,7 +203,7 @@ var readCSVandUpdateChart = function(bankName) {
       data.bookings = prepareBookingData(results.data, bankName);
       updateDataAndCharts();
     }
-  })
+  });
 };
 
 var getCategoryLookupTable = function(categories) {
@@ -211,7 +214,7 @@ var getCategoryLookupTable = function(categories) {
     });
   });
   return lookupTable;
-}
+};
 
 var categorizeBookings = function() {
   var lookupTable = getCategoryLookupTable(categories);
@@ -237,7 +240,7 @@ var getCategoryTotals = function() {
   // initialize all values to 0
   categories.forEach(function(category) {
     categoryTotals[category.name] = 0;
-  })
+  });
   categoryTotals['unknown_income'] = 0;
   categoryTotals['unknown_expense'] = 0;
   data.bookings.forEach(function(booking) {
@@ -261,6 +264,6 @@ var drawExpensesChart = function() {
     height:600,
     pieSliceText: 'label',
     sliceVisibilityThreshold: 0
-  }
+  };
   expensesChart.draw(chartDataTable, options);
 };
