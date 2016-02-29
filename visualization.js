@@ -9,7 +9,7 @@
 var lineChart;
 var expensesChart;
 
-google.charts.load('current', {packages: ['line', 'corechart']});
+google.charts.load('44', {packages: ['line', 'corechart']});
 google.charts.setOnLoadCallback(function() {
   // new linechart without content (height will be 0)
   lineChart = new google.charts.Line(document.getElementById('linechart-dailybalance'));
