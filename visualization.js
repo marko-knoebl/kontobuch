@@ -77,6 +77,71 @@ var redrawCharts = function() {
   var bodyHeight = parseInt(bodyStyle.getPropertyValue('height'));
   drawDailyBalanceChart(data.dailyBalancesGoogleDataTable, bodyWidth - 32, bodyHeight - 32);
   drawExpensesChart(bodyWidth - 32, bodyHeight - 32);
+  drawd3chart();
 };
 
 window.addEventListener('resize', redrawCharts);
+
+// MOST OF THE ABOVE CODE CAN BE DISCARDED
+
+var balanceChart;
+var chartData_ = {
+  drawn: false,
+  dailyBalancesChartData: null
+};
+
+var dailyBalancesToXY = function(dailyBalances) {
+  var points = data.dailyBalances.map(function(element) {
+    // element.date will be automatically converted to an integer
+    return {x: element.date, y: element.balance};
+  });
+  return points;
+};
+
+var drawd3chart = function() {
+  if (chartData_.drawn === false) {
+    // draw a new chart
+    chartData_.drawn = true;
+    nv.addGraph(graphGenerator);
+    // show previously hidden container
+    document.querySelector('#chart-dailybalance-container').style.display="block";
+  } else {
+    // update existing chart
+    chartData_.dailyBalancesChartData[0].values = dailyBalancesToXY(data.dailyBalances);
+    balanceChart.update();
+  }
+};
+
+var graphGenerator = function() {
+  balanceChart = nv.models.lineChart()
+    .options({
+      transitionDuration: 1000,
+      useInteractiveGuideline: true
+    })
+  ;
+
+  var format = d3.time.format('%Y-%m-%d');
+  balanceChart.xAxis.axisLabel('Date');
+  balanceChart.xAxis.tickFormat(function(d) {
+    // convert dates from integers back to dates before formatting
+    return format(new Date(d));
+  });
+
+  balanceChart.yAxis
+    .axisLabel('Balance')
+    .tickFormat(d3.format('d'))
+  ;
+  var points = dailyBalancesToXY(data.dailyBalances);
+  chartData_.dailyBalancesChartData = [{
+    values: points,
+    color: '#1976d2',
+    strokeWidth: 2,
+    key: 'Account Balance'
+  }];
+  d3.select('#chart-dailybalance-container').append('svg')
+    .datum(chartData_.dailyBalancesChartData)
+    .call(balanceChart)
+  ;
+  nv.utils.windowResize(balanceChart.update);
+  return balanceChart;
+};
