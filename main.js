@@ -142,8 +142,7 @@ var readCSVandUpdateChart = function(bankName) {
       data.transactions = prepareTransactionData(results.data, bankName);
       updateData();
       data.dailyBalancesGoogleDataTable = dailyBalancesToDailyBalancesDataTable();
-      drawDailyBalanceChart(data.dailyBalancesGoogleDataTable);
-      drawExpensesChart();
+      redrawCharts();
     }
   });
 };
@@ -193,7 +192,7 @@ var getCategoryTotals = function(transactions, categories) {
   });
   categoryTotals['unknown_income'] = 0;
   categoryTotals['unknown_expense'] = 0;
-  data.transactions.forEach(function(transaction) {
+  transactions.forEach(function(transaction) {
     categoryTotals[transaction.category] += transaction.amount;
   });
   return categoryTotals;
