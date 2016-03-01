@@ -141,8 +141,8 @@ var readCSVandUpdateChart = function(bankName) {
     complete: function(results) {
       data.transactions = prepareTransactionData(results.data, bankName);
       updateData();
-      data.dailyBalancesGoogleDataTable = dailyBalancesToDailyBalancesDataTable();
-      redrawCharts();
+      drawChart('dailyBalance');
+      drawChart('expensesByCategory');
     }
   });
 };
