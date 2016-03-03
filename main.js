@@ -4,11 +4,10 @@
 
 var data = {
   currentBalance: 0,
+  // format: {date: ..., amount: ..., details: ..., category: ...}
   transactions: null,
-  dailyBalancesBaseZero: null,
-  dailyBalances: null,
-  dailyBalancesGoogleDataTable: null,
-  keywordList: null
+  // format: {date: ..., balance: ...}
+  dailyBalances: null
 };
 
 /**
@@ -123,9 +122,9 @@ var correctDailyBalancesByAmount = function(dailyBalances, amount) {
  * other data items.
  */
 var updateData = function() {
-  data.dailyBalancesBaseZero = transactionsToDailyBalances(data.transactions);
-  var correction = data.currentBalance - data.dailyBalancesBaseZero[data.dailyBalancesBaseZero.length-1].balance;
-  data.dailyBalances = correctDailyBalancesByAmount(data.dailyBalancesBaseZero, correction);
+  var dailyBalancesBaseZero = transactionsToDailyBalances(data.transactions);
+  var correction = data.currentBalance - dailyBalancesBaseZero[dailyBalancesBaseZero.length-1].balance;
+  data.dailyBalances = correctDailyBalancesByAmount(dailyBalancesBaseZero, correction);
   categorizeTransactions();
 };
 
