@@ -14,7 +14,6 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
     <script src="bower_components/angular/angular.js"></script>
-    <link rel="stylesheet" href="bower_components/angular/angular.css"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -28,19 +27,33 @@
             font-size: 12px;
             font-family: Roboto, "Helvetica Neue", sans-serif;
         }
+        md-tabs {
+          height: 100%;
+        }
     </style>
-    <md-button ng-click="showNewAccountDialog($event, 'bawagpsk')" class="md-raised md-primary" style="background-color:#990000">Add BawagPSK account</md-button>
-    <md-button ng-click="showNewAccountDialog($event, 'hellobank')" class="md-raised md-primary" style="background-color:#0d80aa">Add hellobank account</md-button>
-    <md-button ng-click="showNewAccountDialog($event, 'raiffeisen')" class="md-raised md-primary" style="background-color:#fbf315; color:#222222">Add Raiffeisen account</md-button>
-
-    <div id="chart-expenses-by-category-container" style="width:100%; height:100%; display:none">
-      <svg id="chart-expenses-by-category"></svg>
-    </div>
-    <div id="chart-dailybalance-container" style="width:100%; height:100%; display:none">
+    <div id="new-account-buttons">
+      <md-button ng-click="showNewAccountDialog($event, 'bawagpsk')" class="md-raised md-primary" style="background-color:#990000">Add BawagPSK account</md-button>
+      <md-button ng-click="showNewAccountDialog($event, 'hellobank')" class="md-raised md-primary" style="background-color:#0d80aa">Add hellobank account</md-button>
+      <md-button ng-click="showNewAccountDialog($event, 'raiffeisen')" class="md-raised md-primary" style="background-color:#fbf315; color:#222222">Add Raiffeisen account</md-button>
     </div>
 
-    <div id="linechart-dailybalance"></div>
-    <div id="piechart"></div>
+    <div id="charts" style="height:100%; display:none">
+
+      <md-tabs class="md-primary">
+
+        <md-tab label="Account balance">
+          <md-tab-content id="chart-dailybalance-container">
+          </md-tab-content>
+        </md-tab>
+
+        <md-tab label="Expenses">
+          <md-tab-content id="chart-expenses-by-category-container">
+            <svg id="chart-expenses-by-category"></svg>
+          </md-tab-content>
+        </md-tab>
+
+      </md-tabs>
+    </div>
 
     <script src="main.js"></script>
     <script src="visualization.js"></script>
