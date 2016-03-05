@@ -74,6 +74,7 @@ var dailyBalanceGraphGenerator = function() {
     .axisLabel('Balance')
     .tickFormat(d3.format('d'))
   ;
+  balanceChart.showLegend(false);
   var points = dailyBalancesToXY(data.dailyBalances);
   chartData__.dailyBalance.d3InputData = [{
     values: points,
@@ -109,6 +110,7 @@ var expensesByCategoryChartGenerator = function() {
   var chartData = transactionsToExpensesByCategory(data.transactions);
   chartData__.expensesByCategory.data = chartData;
   chartData__.expensesByCategory.chart = nv.models.pieChart();
+  chartData__.expensesByCategory.chart.showLegend(false);
   d3.select('#chart-expenses-by-category-container').append('svg')
     .datum(chartData)
     .call(chartData__.expensesByCategory.chart);
