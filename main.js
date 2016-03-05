@@ -131,7 +131,7 @@ var updateData = function() {
 /**
  * Read CSV data and update charts accordingly
  */
-var readCSVandUpdateChart = function(bankName) {
+var readCSVandUpdateChart = function(bankName, callback) {
   Papa.parse(document.getElementById('file-input').files[0], {
     encoding: csvImportConfig[bankName].encoding,
     delimiter: csvImportConfig[bankName].delimiter,
@@ -142,6 +142,7 @@ var readCSVandUpdateChart = function(bankName) {
       updateData();
       drawChart('dailyBalance');
       drawChart('expensesByCategory');
+      callback();
     }
   });
 };

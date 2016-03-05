@@ -31,23 +31,20 @@ function NewBawagpskAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
     //$scope.$parent.currentBalance = data.currentBalance;
-    readCSVandUpdateChart('bawagpsk');
-    $mdDialog.hide();
+    readCSVandUpdateChart('bawagpsk', $mdDialog.hide);
   };
 }
 
 function NewHellobankAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
-    readCSVandUpdateChart('hellobank');
-    $mdDialog.hide();
+    readCSVandUpdateChart('hellobank', $mdDialog.hide);
   };
 }
 
 function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
-    readCSVandUpdateChart('raiffeisen');
-    $mdDialog.hide();
+    readCSVandUpdateChart('raiffeisen', $mdDialog.hide);
   };
 }
