@@ -10,7 +10,6 @@ var chartData__ = {
     d3InputData: null,
     // type: nv.models.lineChart
     chart: null,
-    containerId: '#chart-dailybalance-container'
   },
   expensesByCategory: {
     drawn: false,
@@ -19,7 +18,6 @@ var chartData__ = {
     d3InputData: null,
     // type: nv.models.pieChart
     chart: null,
-    containerId: '#chart-expenses-by-category-container'
   }
 };
 
@@ -44,8 +42,6 @@ var drawChart = function(chartName) {
     }
   }
 };
-
-window.addEventListener('resize', function(){drawChart('expensesByCategory')});
 
 /**
  * Convert from format {date: ..., balance: ...}
@@ -97,7 +93,7 @@ var dailyBalanceGraphGenerator = function() {
 chartData__.dailyBalance.generator = dailyBalanceGraphGenerator;
 
 var transactionsToExpensesByCategory = function(transactions) {
-  var categoryTotals = getCategoryTotals(data.transactions, categories);
+  var categoryTotals = getCategoryTotals(transactions, categories);
   var expensesByCategoryD3 = [];
   for (var category in categoryTotals) {
     expensesByCategoryD3.push({
@@ -113,9 +109,10 @@ var expensesByCategoryChartGenerator = function() {
   var chartData = transactionsToExpensesByCategory(data.transactions);
   chartData__.expensesByCategory.data = chartData;
   chartData__.expensesByCategory.chart = nv.models.pieChart();
-  d3.select('#chart-expenses-by-category')
+  d3.select('#chart-expenses-by-category-container').append('svg')
     .datum(chartData)
     .call(chartData__.expensesByCategory.chart);
+  nv.utils.windowResize(chartData__.expensesByCategory.chart.update);
   return chartData__.expensesByCategory.chart;
 };
 
