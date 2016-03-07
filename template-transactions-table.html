@@ -11,6 +11,35 @@
   md-toolbar.md-table-toolbar.alternate .md-toolbar-tools {
     font-size: 16px;
   }
+  /* override the default styles from md-data-table.css:
+     The default style pads the first column in the table
+     differently than the others - override this behaviour
+  */
+  table.md-table.md-row-select td.md-cell:first-child,
+  table.md-table.md-row-select th.md-column:first-child {
+    width: 20px;
+    padding: 0 0 0 16px;
+  }
+  table.md-table.md-row-select td.md-cell:nth-child(2),
+  table.md-table.md-row-select th.md-column:nth-child(2) {
+    padding: 0 16px;
+  }
+  table.md-table.md-row-select td.md-cell:nth-child(n+3):nth-last-child(n+2),
+  table.md-table.md-row-select th.md-column:nth-child(n+3):nth-last-child(n+2) {
+    padding: 0 16px;
+  }
+  table.md-table:not(.md-row-select) td.md-cell:first-child,
+  table.md-table:not(.md-row-select) th.md-column:first-child {
+    padding: 0 16px;
+  }
+  table.md-table:not(.md-row-select) td.md-cell:nth-child(n+2):nth-last-child(n+2),
+  table.md-table:not(.md-row-select) th.md-column:nth-child(n+2):nth-last-child(n+2) {
+    padding: 0 16px;
+  }
+  table.md-table td.md-cell:last-child,
+  table.md-table th.md-column:last-child {
+    padding: 0 16px;
+  }
 </style>
 
 <div ng-controller="TransactionsTableCtrl">
