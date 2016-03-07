@@ -2,7 +2,7 @@
  * Angular Material Data Table
  * https://github.com/daniel-nagy/md-data-table
  * @license MIT
- * v0.9.11
+ * v0.9.12
  */
 (function (window, angular, undefined) {
 'use strict';
@@ -305,7 +305,7 @@ angular.module('md.data.table')
  */
 function controllerDecorator($delegate) {
   return function(expression, locals, later, ident) {
-    if (later && typeof later === 'object') {
+    if(later && typeof later === 'object') {
       var create = $delegate(expression, locals, true, ident);
       angular.extend(create.instance, later);
       return create();
@@ -360,14 +360,10 @@ function mdEditDialog($compile, $controller, $document, $mdUtil, $q, $rootScope,
     
     body.prepend(backdrop).append(element.addClass('md-whiteframe-1dp'));
     
-    positionDialog(element, options.targetEvent.currentTarget);
+    positionDialog(element, options.target);
     
     if(options.focusOnOpen) {
-      var autofocus = $mdUtil.findFocusTarget(element);
-      
-      if(autofocus) {
-        autofocus.focus();
-      }
+      focusOnOpen(element);
     }
     
     if(options.clickOutsideToClose) {
@@ -480,7 +476,17 @@ function mdEditDialog($compile, $controller, $document, $mdUtil, $q, $rootScope,
       body.off('keyup', keyup);
     });
   }
-  
+
+  function focusOnOpen(element) {
+    $mdUtil.nextTick(function () {
+      var autofocus = $mdUtil.findFocusTarget(element);
+
+      if(autofocus) {
+        autofocus.focus();
+      }
+    }, false);
+  }
+
   function positionDialog(element, target) {
     var table = angular.element(target).controller('mdCell').getTable();
     
@@ -637,6 +643,8 @@ function mdEditDialog($compile, $controller, $document, $mdUtil, $q, $rootScope,
       return logError('You must define options.controllerAs when options.bindToController is true.');
     }
     
+    options.target = options.targetEvent.currentTarget;
+
     var promise = getTemplate(options);
     var promises = [promise];
     

@@ -2,7 +2,7 @@
 
 /* jshint -W117 */
 
-var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages']);
+var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages', 'md.data.table']);
 
 // Angular setup
 
@@ -48,3 +48,32 @@ function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
     readCSVandUpdateChart('raiffeisen', $mdDialog.hide);
   };
 }
+
+var copyTransactionsToAngularScope;
+
+myFinancesModule.controller('TransactionsTableCtrl', function($scope) {
+  // based on:
+  // https://github.com/daniel-nagy/md-data-table
+  $scope.selected = [];
+
+  $scope.options = {
+    // select a row on click
+    autoSelect: false,
+    boundaryLinks: true,
+    largeEditDialog: false,
+    pageSelector: false,
+    rowSelection: true
+  };
+
+  $scope.query = {
+    order: '-date',
+    limit: 100,
+    page: 1
+  };
+
+  $scope.transactions = [];
+
+  copyTransactionsToAngularScope = function() {
+    $scope.transactions = data.transactions;
+  };
+})

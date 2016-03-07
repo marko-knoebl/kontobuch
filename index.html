@@ -19,9 +19,15 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
+
+    <!-- md-datatable -->
+    <link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
   </head>
   <body ng-app="MyFinances" ng-controller="MyFinancesCtrl">
     <style>
+      body {
+        background-color: #f5f5f5;
+      }
         /* override nvd3's text style*/
         .nvd3 text {
             font-size: 12px;
@@ -29,6 +35,11 @@
         }
         md-tabs {
           height: 100%;
+        }
+        md-tabs-wrapper {
+          box-shadow: 0px 3px 6px rgba(0,0,0,0.35);
+          /* force above toolbar so the shadow is visible on the transactions page*/
+          z-index: 3;
         }
     </style>
     <div id="new-account-buttons">
@@ -51,12 +62,18 @@
           </md-tab-content>
         </md-tab>
 
+        <md-tab label="Transactions">
+          <md-tab-content id="transactions-table-container" ng-include="'template-transactions-table.html'">
+          </md-tab-content>
+        </md-tab>
+
       </md-tabs>
     </div>
 
     <script src="main.js"></script>
     <script src="visualization.js"></script>
     <script src="myfinances-angular.js"></script>
+    <script src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
 
   </body>
 </html>

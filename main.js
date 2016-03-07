@@ -23,6 +23,8 @@ var csvImportConfig = {
     dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
     amountKey: 4,
     detailsKey: 1,
+    // replace repeated spaces with just one space
+    detailsNormalizer: function(details) {return details.replace(/  +/g, ' ')},
     reverse: true
   },
   hellobank: {
@@ -75,6 +77,9 @@ var prepareTransactionData = function(rawTransactionData, bankName) {
     date = new Date(date + 'T12:00:00');
     var amount = parseFloat(rawTransactionData[i][config.amountKey].replace('.', '').replace(',', '.'));
     var details = rawTransactionData[i][config.detailsKey];
+    if (config.detailsNormalizer) {
+      details = config.detailsNormalizer(details);
+    }
     transactionData.push({date: date, amount: amount, details: details});
   }
   return transactionData;
@@ -140,6 +145,7 @@ var readCSVandUpdateChart = function(bankName, callback) {
     complete: function(results) {
       data.transactions = prepareTransactionData(results.data, bankName);
       updateData();
+      copyTransactionsToAngularScope();
       drawChart('dailyBalance');
       drawChart('expensesByCategory');
       callback();
