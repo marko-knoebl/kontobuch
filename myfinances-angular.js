@@ -67,7 +67,7 @@ myFinancesModule.controller('TransactionsTableCtrl', function($scope) {
 
   $scope.query = {
     order: '-date',
-    limit: 100,
+    limit: 10,
     page: 1
   };
 
