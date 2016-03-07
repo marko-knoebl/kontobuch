@@ -76,6 +76,17 @@ var dailyBalanceGraphGenerator = function() {
   ;
   balanceChart.showLegend(false);
   var points = dailyBalancesToXY(data.dailyBalances);
+  if (points.length > 150) {
+    // reduce number of points by only taking into account transactions with an amount > 50
+    var i = 1;
+    while (i < points.length - 2) {
+      if (Math.abs(points[i].y - points[i+1].y) < 50 && Math.abs(points[i-1].y - points[i].y) < 50) {
+        points.splice(i, 1);
+      } else {
+        i ++;
+      }
+    }
+  }
   chartData__.dailyBalance.d3InputData = [{
     values: points,
     color: '#1976d2',
