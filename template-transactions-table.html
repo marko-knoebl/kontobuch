@@ -62,8 +62,8 @@
         <tr md-row>
           <th md-column md-order-by="date"><span>Date</span></th>
           <th md-column md-order-by="details"><span>Details</span></th>
-          <th md-column md-numeric md-order-by="amount"><span>Amount (€)</span></th>
           <th md-column md-order-by="category"><span>Category</span></th>
+          <th md-column md-numeric md-order-by="amount"><span>Amount (€)</span></th>
         </tr>
       </thead>
       <tbody md-body>
@@ -73,8 +73,8 @@
             {{transaction.details | limitTo: 30}}{{transaction.details.length > 30 ? '...' : ''}}
             <md-tooltip md-direction="bottom">{{transaction.details}}</md-tooltip>
           </td>
-          <td md-cell>{{transaction.amount | number: 2}}</td>
           <td md-cell>{{transaction.category}}</td>
+          <td md-cell>{{transaction.amount | number: 2}}</td>
         </tr>
       </tbody>
     </table>
