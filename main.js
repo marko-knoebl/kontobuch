@@ -44,6 +44,17 @@ var csvImportConfig = {
     dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
     amountKey: 3,
     detailsKey: 1
+  },
+  paypal: {
+    encoding: 'ISO-8859-1',
+    delimiter: ',',
+    header: true,
+    dateKey: 'Datum',
+    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+    amountKey: ' Brutto',
+    detailsKey: ' Name',
+    //otherParty: 3,
+    reverse: true
   }
 };
 

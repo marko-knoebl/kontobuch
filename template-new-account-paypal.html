@@ -1,0 +1,31 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools"><h2>New account</h2></div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <div>
+        <p>We will now import your financial data from PayPal.</p>
+        <p>Please log in to your <a href="https://www.paypal.com/signin/?country.x=AT&locale.x=de_AT" target="_blank">PayPal</a> account.
+      </div>
+      <div>
+        Enter your current PayPal account balance (Guthaben):<br>
+        <md-input-container style="margin-bottom:0px">
+          <label>Current Balance</label>
+          <input type="number" ng-model="currentBalance"/>
+        </md-input-container>
+      </div>
+      <div>
+        <p>Next, go to <strong>Aktivitäten</strong>, click on the <strong>Abrechnungen</strong> dropdown on the right and select <strong>Aktivitäten exportieren</strong>.</p>
+        <p>Select <strong>Spezifischer Datumsbereich</strong> and enter the desired timeframe (the maximum is 2 years).</p>
+        <p>In the dropdown, select the first entry: <strong>Alle Aktivitäten (CSV, kommagetrennt)</strong>.</p>
+        <p> Click on <strong>Herunterladen</strong>, save the CSV file to your device and upload it below:</p>
+        <input type="file" id="file-input" style="margin-top:16px">
+      </div>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

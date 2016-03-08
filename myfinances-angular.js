@@ -15,6 +15,8 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
       controller = NewHellobankAccountDialogController;
     } else if (bank === 'raiffeisen') {
       controller = NewRaiffeisenAccountDialogController;
+    } else if (bank === 'paypal') {
+      controller = NewPaypalAccountDialogController;
     }
     $mdDialog.show({
       templateUrl: 'template-new-account-' + bank + '.html',
@@ -46,6 +48,13 @@ function NewRaiffeisenAccountDialogController($scope, $mdDialog) {
   $scope.processOKClicked = function() {
     data.currentBalance = $scope.currentBalance;
     readCSVandUpdateChart('raiffeisen', $mdDialog.hide);
+  };
+}
+
+function NewPaypalAccountDialogController($scope, $mdDialog) {
+  $scope.processOKClicked = function() {
+    data.currentBalance = $scope.currentBalance;
+    readCSVandUpdateChart('paypal', $mdDialog.hide);
   };
 }
 
