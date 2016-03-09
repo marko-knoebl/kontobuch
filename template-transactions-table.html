@@ -40,13 +40,21 @@
   table.md-table th.md-column:last-child {
     padding: 0 16px;
   }
+  md-toolbar.md-table-toolbar .md-toolbar-tools {
+    height: auto;
+    max-height: auto;
+  }
+  .md-table-pagination {
+    border-top: 0px none black;
+  }
 </style>
 
 <div ng-controller="TransactionsTableCtrl">
 
-  <md-toolbar class="md-table-toolbar md-default" ng-hide="options.rowSelection && selected.length">
-    <div class="md-toolbar-tools">
-      <span>Transactions</span>
+  <md-toolbar class="md-table-toolbar md-default" ng-hide="options.rowSelection && selected.length" >
+    <div class="md-toolbar-tools" style="display: flex; flex-wrap:wrap">
+      <div style="height: 64px; display: flex; flex-direction: row; align-items: center">Transactions</div>
+      <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]" style="flex-grow:1"></md-table-pagination>
     </div>
   </md-toolbar>
 
@@ -79,6 +87,4 @@
       </tbody>
     </table>
   </md-table-container>
-
-  <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]"></md-table-pagination>
 </div>
