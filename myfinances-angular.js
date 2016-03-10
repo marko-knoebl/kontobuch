@@ -7,6 +7,7 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages',
 // Angular setup
 
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
+  $scope.currentBalance = 0;
   $scope.showNewAccountDialog = function(event, bank) {
     var controller;
     if (bank === 'bawagpsk') {

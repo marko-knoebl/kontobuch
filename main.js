@@ -85,6 +85,9 @@ var prepareTransactionData = function(rawTransactionData, bankName) {
     if (config.dateNormalizer) {
       date = config.dateNormalizer(date);
     }
+    if (!date.match('[0-9]{4}-[0-9]{2}-[0-9]{2}')) {
+      throw 'invalid input: date'
+    }
     date = new Date(date + 'T12:00:00');
     var amount = parseFloat(rawTransactionData[i][config.amountKey].replace('.', '').replace(',', '.'));
     var details = rawTransactionData[i][config.detailsKey];
@@ -92,6 +95,13 @@ var prepareTransactionData = function(rawTransactionData, bankName) {
       details = config.detailsNormalizer(details);
     }
     transactionData.push({date: date, amount: amount, details: details});
+  }
+  var invalid = (
+    transactionData.length === 0 ||
+    transactionData[0].date > transactionData[transactionData.length - 1].date
+  );
+  if (invalid) {
+    throw 'invalid input'
   }
   return transactionData;
 };
@@ -154,7 +164,14 @@ var readCSVandUpdateChart = function(bankName, callback) {
     header: csvImportConfig[bankName].header,
     skipEmptyLines: true,
     complete: function(results) {
-      data.transactions = prepareTransactionData(results.data, bankName);
+      var transactions;
+      try {
+        transactions = prepareTransactionData(results.data, bankName);
+      } catch (err) {
+        console.log(err);
+        alert('Unable to import data.');
+      }
+      data.transactions = transactions;
       updateData();
       copyTransactionsToAngularScope();
       drawChart('dailyBalance');
