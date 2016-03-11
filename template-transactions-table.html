@@ -47,6 +47,12 @@
   .md-table-pagination {
     border-top: 0px none black;
   }
+  .transaction-positive {
+    color: #3d9400 !important;
+  }
+  .transaction-negative {
+    color: #cc2914 !important;
+  }
 </style>
 
 <div ng-controller="TransactionsTableCtrl">
@@ -82,7 +88,7 @@
             <md-tooltip md-direction="bottom">{{transaction.details}}</md-tooltip>
           </td>
           <td md-cell>{{transaction.category}}</td>
-          <td md-cell>{{transaction.amount | number: 2}}</td>
+          <td md-cell ng-class="{'transaction-positive': transaction.amount>0, 'transaction-negative': transaction.amount<0}">{{transaction.amount | number: 2}}</td>
         </tr>
       </tbody>
     </table>
