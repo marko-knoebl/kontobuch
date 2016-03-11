@@ -209,7 +209,7 @@ var categorizeTransactions = function() {
       }
     }
     if (transaction.category === undefined) {
-      transaction.category = transaction.amount > 0 ? 'unknown_income' : 'unknown_expense';
+      transaction.category = transaction.amount > 0 ? 'income' : 'expenses';
     }
   }
 };
@@ -224,8 +224,8 @@ var getCategoryTotals = function(transactions, categories) {
   categories.forEach(function(category) {
     categoryTotals[category.name] = 0;
   });
-  categoryTotals['unknown_income'] = 0;
-  categoryTotals['unknown_expense'] = 0;
+  categoryTotals['income'] = 0;
+  categoryTotals['expenses'] = 0;
   transactions.forEach(function(transaction) {
     categoryTotals[transaction.category] += transaction.amount;
   });
