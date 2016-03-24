@@ -9,58 +9,7 @@ var data = {
   // format: {date: ..., balance: ...}
   dailyBalances: null
 };
-
-/**
- * Configuration data that describes how data from each individual
- * bank can be imported
- */
-var csvImportConfig = {
-  bawagpsk: {
-    name: 'Bawag PSK',
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: false,
-    dateKey: 2,
-    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-    amountKey: 4,
-    detailsKey: 1,
-    // replace repeated spaces with just one space
-    detailsNormalizer: function(details) {return details.replace(/  +/g, ' ')},
-    reverse: true
-  },
-  raiffeisen: {
-    name: 'Raiffeisen',
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: false,
-    dateKey: 0,
-    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-    amountKey: 3,
-    detailsKey: 1
-  },
-  hellobank: {
-    name: 'Hello Bank',
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: true,
-    dateKey: 'Valutadatum',
-    amountKey: 'Betrag',
-    detailsKey: 'Umsatztext',
-    reverse: true
-  },
-  paypal: {
-    name: 'PayPal',
-    encoding: 'ISO-8859-1',
-    delimiter: ',',
-    header: true,
-    dateKey: 'Datum',
-    dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-    amountKey: ' Brutto',
-    detailsKey: ' Name',
-    //otherParty: 3,
-    reverse: true
-  }
-};
+var csvImportConfig = bankStatement.csvImportConfig;
 
 var addDays = function(date, days) {
   /** add a number of days to a given date */
@@ -161,27 +110,24 @@ var updateData = function() {
  * Read CSV data and update charts accordingly
  */
 var readCSVandUpdateChart = function(bankName, callback) {
-  Papa.parse(document.getElementById('file-input').files[0], {
-    encoding: csvImportConfig[bankName].encoding,
-    delimiter: csvImportConfig[bankName].delimiter,
-    header: csvImportConfig[bankName].header,
-    skipEmptyLines: true,
-    complete: function(results) {
-      var transactions;
-      try {
-        transactions = prepareTransactionData(results.data, csvImportConfig[bankName]);
-      } catch (err) {
-        console.log(err);
-        alert('Unable to import data.');
-      }
-      data.transactions = transactions;
-      updateData();
-      copyTransactionsToAngularScope();
-      drawChart('dailyBalance');
-      drawChart('expensesByCategory');
-      callback();
+  var onComplete = function(results) {
+    var transactions;
+    console.log('removed last entry:', results.data.pop());
+    try {
+      transactions = prepareTransactionData(results.data, csvImportConfig[bankName]);
+    } catch (err) {
+      console.log(err);
+      alert('Unable to import data.');
     }
-  });
+    data.transactions = transactions;
+    updateData();
+    copyTransactionsToAngularScope();
+    drawChart('dailyBalance');
+    drawChart('expensesByCategory');
+    callback();
+  };
+  var csvFile = document.querySelector('#file-input').files[0];
+  bankStatement.readCsv(csvFile, bankName, onComplete);
 };
 
 /**
