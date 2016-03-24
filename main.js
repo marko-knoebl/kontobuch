@@ -127,7 +127,13 @@ var readCSVandUpdateChart = function(bankName, callback) {
     callback();
   };
   var csvFile = document.querySelector('#file-input').files[0];
-  bankStatement.readCsv(csvFile, bankName, onComplete);
+  var encoding = csvImportConfig[bankName].encoding;
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var csvData = bankStatement.readCsvString(event.target.result, 'bawagpsk');
+    onComplete(csvData);
+  };
+  reader.readAsText(csvFile, encoding);
 };
 
 /**

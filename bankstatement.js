@@ -62,29 +62,30 @@ var bankStatement = {};
    *     encoding: encoding of the csv file
    *     delimiter: delimiter used in the csv file
    *     header: boolean: whether a header row is present
-   *   complete: callback that receives the parsed data
    * output:
    *   array consisting of chronological entries with these attributes:
    *     date: JavaScript Date object
    *     amount: transaction amount
    *     description: description as provided in the statement
    * example:
-   *   readCsv(myFile, 'bawagpsk', function(result) {console.log(result);});
+   *   readCsv(myFile, 'bawagpsk');
    *   readCsv(
    *     myFile,
    *     {encoding: 'utf-8', delimiter: ',', header: false},
-   *     someCallbackFunction
    *   );
    */
-  bankStatement.readCsv = function(csvFile, config, complete) {
+  bankStatement.readCsvString = function(csvString, config) {
+    var papaConfig;
     if (typeof config === 'string') {
-      config = bankStatement.csvImportConfig[config];
-      if (config === undefined) {
+      papaConfig = bankStatement.csvImportConfig[config];
+      if (papaConfig === undefined) {
         throw 'no import config available for: ' + config;
       }
+    } else {
+      papaConfig = config;
     }
-    config.complete = complete;
-    Papa.parse(csvFile, config);
+    var result = Papa.parse(csvString, papaConfig);
+    return result;
   }
 
 })();
