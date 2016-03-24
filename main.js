@@ -31,7 +31,6 @@ var transactionsToDailyBalances = function(transactions, startBalance) {
   // index of the last unprocessed transaction
   var unprocessedTransactionIndex = 0;
   var today = new Date();
-  today.setHours(1);
   var date = transactions[0].date;
   while (date <= today) {
     date = addDays(date, 1);

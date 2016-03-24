@@ -77,7 +77,7 @@ var bankStatement = {};
       if (!date.match('[0-9]{4}-[0-9]{2}-[0-9]{2}')) {
         throw 'invalid input: date'
       }
-      date = new Date(date + 'T12:00:00');
+      date = new Date(date + 'T00:00:00');
       var amount = parseFloat(rawTransactionData[i][config.amountKey].replace('.', '').replace(',', '.'));
       var details = rawTransactionData[i][config.detailsKey];
       if (config.detailsNormalizer) {
