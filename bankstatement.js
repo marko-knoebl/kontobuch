@@ -56,6 +56,46 @@ var bankStatement = {};
   };
 
   /**
+   * Takes raw, bank-specific transaction data and returns a nicer format:
+   *  [
+   *    {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
+   *    {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
+   *  ]
+   *  @param {Array} rawTransactionData - Transaction data in a bank-specific CSV form
+   *  @param {object} config
+   */
+  var prepareTransactionData = function(rawTransactionData, config) {
+    var transactionData = [];
+    if (config.reverse) {
+      rawTransactionData.reverse();
+    }
+    for (var i = 0; i <= rawTransactionData.length-1; i ++) {
+      var date = rawTransactionData[i][config.dateKey];
+      if (config.dateNormalizer) {
+        date = config.dateNormalizer(date);
+      }
+      if (!date.match('[0-9]{4}-[0-9]{2}-[0-9]{2}')) {
+        throw 'invalid input: date'
+      }
+      date = new Date(date + 'T12:00:00');
+      var amount = parseFloat(rawTransactionData[i][config.amountKey].replace('.', '').replace(',', '.'));
+      var details = rawTransactionData[i][config.detailsKey];
+      if (config.detailsNormalizer) {
+        details = config.detailsNormalizer(details);
+      }
+      transactionData.push({date: date, amount: amount, details: details});
+    }
+    var invalid = (
+      transactionData.length === 0 ||
+      transactionData[0].date > transactionData[transactionData.length - 1].date
+    );
+    if (invalid) {
+      throw 'invalid input'
+    }
+    return transactionData;
+  };
+
+  /**
    * input:
    *   csv string: content of a csv file
    *   config: configuration object or bankname string
@@ -75,18 +115,16 @@ var bankStatement = {};
    *   );
    */
   bankStatement.readCsvString = function(csvString, config) {
-    var papaConfig;
     if (typeof config === 'string') {
-      papaConfig = bankStatement.csvImportConfig[config];
-      papaConfig.skipEmptyLines = true;
-      if (papaConfig === undefined) {
+      config = bankStatement.csvImportConfig[config];
+      if (config === undefined) {
         throw 'no import config available for: ' + config;
       }
-    } else {
-      papaConfig = config;
+      config.skipEmptyLines = true;
     }
-    var result = Papa.parse(csvString, papaConfig);
+    var result = Papa.parse(csvString, config);
     var transactions = result.data;
+    transactions = prepareTransactionData(transactions, config);
 
     return transactions;
   }
