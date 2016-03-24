@@ -16,6 +16,7 @@ var data = {
  */
 var csvImportConfig = {
   bawagpsk: {
+    name: 'Bawag PSK',
     encoding: 'ISO-8859-1',
     delimiter: ';',
     header: false,
@@ -27,16 +28,8 @@ var csvImportConfig = {
     detailsNormalizer: function(details) {return details.replace(/  +/g, ' ')},
     reverse: true
   },
-  hellobank: {
-    encoding: 'ISO-8859-1',
-    delimiter: ';',
-    header: true,
-    dateKey: 'Valutadatum',
-    amountKey: 'Betrag',
-    detailsKey: 'Umsatztext',
-    reverse: true
-  },
   raiffeisen: {
+    name: 'Raiffeisen',
     encoding: 'ISO-8859-1',
     delimiter: ';',
     header: false,
@@ -45,7 +38,18 @@ var csvImportConfig = {
     amountKey: 3,
     detailsKey: 1
   },
+  hellobank: {
+    name: 'Hello Bank',
+    encoding: 'ISO-8859-1',
+    delimiter: ';',
+    header: true,
+    dateKey: 'Valutadatum',
+    amountKey: 'Betrag',
+    detailsKey: 'Umsatztext',
+    reverse: true
+  },
   paypal: {
+    name: 'PayPal',
     encoding: 'ISO-8859-1',
     delimiter: ',',
     header: true,
@@ -72,10 +76,9 @@ var addDays = function(date, days) {
  *    {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
  *  ]
  *  @param {Array} rawTransactionData - Transaction data in a bank-specific CSV form
- *  @param {string} bankName - Name of the associated bank
+ *  @param {object} config
  */
-var prepareTransactionData = function(rawTransactionData, bankName) {
-  var config = csvImportConfig[bankName];
+var prepareTransactionData = function(rawTransactionData, config) {
   var transactionData = [];
   if (config.reverse) {
     rawTransactionData.reverse();
@@ -166,7 +169,7 @@ var readCSVandUpdateChart = function(bankName, callback) {
     complete: function(results) {
       var transactions;
       try {
-        transactions = prepareTransactionData(results.data, bankName);
+        transactions = prepareTransactionData(results.data, csvImportConfig[bankName]);
       } catch (err) {
         console.log(err);
         alert('Unable to import data.');

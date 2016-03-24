@@ -9,9 +9,10 @@
 
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/build/nv.d3.js"></script>
-    <link href="bower_components/nvd3/build/nv.d3.css" rel="stylesheet" type="text/css">
+    <link href="bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
 
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
@@ -47,11 +48,23 @@
         height: 20%;
       }
     </style>
-    <div id="new-account-buttons" style="display: flex; flex-direction: column; align-items: center; justify-content: space-around; height:100%">
-      <md-button ng-click="showNewAccountDialog($event, 'bawagpsk')" class="md-raised md-primary account-choice" style="background-color:#990000;">Add BawagPSK account</md-button>
-      <md-button ng-click="showNewAccountDialog($event, 'hellobank')" class="md-raised md-primary account-choice" style="background-color:#0d80aa;">Add hellobank account</md-button>
-      <md-button ng-click="showNewAccountDialog($event, 'raiffeisen')" class="md-raised md-primary account-choice" style="background-color:#fbf315; color:#222222;">Add Raiffeisen account</md-button>
-      <md-button ng-click="showNewAccountDialog($event, 'paypal')" class="md-raised md-primary account-choice" style="background-color:#019cde;">Add PayPal account</md-button>
+
+    <div id="new-account-button" style="display: flex; align-items: center; margin-left: 16px">
+      <md-menu>
+        <md-button aria-label="Open demo menu" class="md-fab" ng-click="$mdOpenMenu($event)">
+          <md-icon md-menu-origin>add</md-icon>
+        </md-button>
+        <md-menu-content>
+          <!--TODO: don't hard-code banknames-->
+          <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'hellobank', 'paypal']">
+            <md-button ng-click="showNewAccountDialog($event, bankname)">
+              <md-icon md-menu-align-target>add</md-icon>
+              {{csvImportConfig[bankname].name}}
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <div style="font-size: 24px;  margin-left: 8px">Add account</div>
     </div>
 
     <div id="charts" style="height:100%; display:none">
