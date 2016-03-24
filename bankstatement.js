@@ -78,6 +78,7 @@ var bankStatement = {};
     var papaConfig;
     if (typeof config === 'string') {
       papaConfig = bankStatement.csvImportConfig[config];
+      papaConfig.skipEmptyLines = true;
       if (papaConfig === undefined) {
         throw 'no import config available for: ' + config;
       }
@@ -85,7 +86,9 @@ var bankStatement = {};
       papaConfig = config;
     }
     var result = Papa.parse(csvString, papaConfig);
-    return result;
+    var transactions = result.data;
+
+    return transactions;
   }
 
 })();

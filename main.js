@@ -110,11 +110,10 @@ var updateData = function() {
  * Read CSV data and update charts accordingly
  */
 var readCSVandUpdateChart = function(bankName, callback) {
-  var onComplete = function(results) {
+  var onComplete = function(transactions) {
     var transactions;
-    console.log('removed last entry:', results.data.pop());
     try {
-      transactions = prepareTransactionData(results.data, csvImportConfig[bankName]);
+      transactions = prepareTransactionData(transactions, csvImportConfig[bankName]);
     } catch (err) {
       console.log(err);
       alert('Unable to import data.');
@@ -130,7 +129,7 @@ var readCSVandUpdateChart = function(bankName, callback) {
   var encoding = csvImportConfig[bankName].encoding;
   var reader = new FileReader();
   reader.onload = function(event) {
-    var csvData = bankStatement.readCsvString(event.target.result, 'bawagpsk');
+    var csvData = bankStatement.readCsvString(event.target.result, bankName);
     onComplete(csvData);
   };
   reader.readAsText(csvFile, encoding);
