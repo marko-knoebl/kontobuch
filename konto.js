@@ -3,11 +3,11 @@
 // out of the box.
 // Other banks need configuration.
 
-var bankStatement = {};
+var konto = {};
 
 (function () {
   "use strict";
-  bankStatement.csvImportConfig = {
+  konto.csvImportConfig = {
     bawagpsk: {
       name: 'Bawag PSK',
       encoding: 'ISO-8859-1',
@@ -123,22 +123,22 @@ var bankStatement = {};
    *     {encoding: 'utf-8', delimiter: ',', header: false},
    *   );
    */
-  bankStatement.BankAccount = function() {};
+  konto.BankAccount = function() {};
 
-  bankStatement.BankAccount.prototype.importCsv = function(csvString, config) {
+  konto.BankAccount.prototype.importCsv = function(csvString, config) {
     // if 'config' is a string assume it's the name of a bank
     if (typeof config === 'string') {
-      if (bankStatement.csvImportConfig[config] === undefined) {
+      if (konto.csvImportConfig[config] === undefined) {
         throw 'No import config available for: ' + config;
       }
-      config = bankStatement.csvImportConfig[config];
+      config = konto.csvImportConfig[config];
       config.skipEmptyLines = true;
     }
     var transactions = Papa.parse(csvString, config).data;
     this.transactions = prepareTransactionData(transactions, config);
   };
 
-  bankStatement.BankAccount.prototype.setCurrentBalance = function(currentBalance) {
+  konto.BankAccount.prototype.setCurrentBalance = function(currentBalance) {
     /**
      * Adjust the initial account balance so the current balance fits the one provided
      */
@@ -150,7 +150,7 @@ var bankStatement = {};
     console.log(this.initialBalance)
   };
 
-  bankStatement.BankAccount.prototype.calculateDailyBalances = function() {
+  konto.BankAccount.prototype.calculateDailyBalances = function() {
     if (this.initialBalance === undefined) {
       throw 'initialBalance is undefined. Call "setCurrentBalance" first.';
     }

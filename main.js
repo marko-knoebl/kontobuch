@@ -11,7 +11,6 @@ var data = {
   // format: {date: ..., balance: ...}
   dailyBalances: null
 };
-var csvImportConfig = bankStatement.csvImportConfig;
 
 /**
  * Based on data.transactions and data.currentBalance, update all
@@ -37,10 +36,10 @@ var readCSVandUpdateChart = function(bankName, callback) {
     callback();
   };
   var csvFile = document.querySelector('#file-input').files[0];
-  var encoding = csvImportConfig[bankName].encoding;
+  var encoding = konto.csvImportConfig[bankName].encoding;
   var reader = new FileReader();
   reader.onload = function(event) {
-    bankAccount = new bankStatement.BankAccount();
+    bankAccount = new konto.BankAccount();
     bankAccount.importCsv(event.target.result, bankName)
     onComplete(bankAccount);
   };

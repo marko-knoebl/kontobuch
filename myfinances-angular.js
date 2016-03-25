@@ -8,7 +8,7 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages',
 
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.currentBalance = 0;
-  $scope.csvImportConfig = csvImportConfig;
+  $scope.csvImportConfig = konto.csvImportConfig;
   $scope.showNewAccountDialog = function(event, bank) {
     var controller;
     if (bank === 'bawagpsk') {
