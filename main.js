@@ -13,13 +13,6 @@ var data = {
 };
 var csvImportConfig = bankStatement.csvImportConfig;
 
-var addDays = function(date, days) {
-  /** add a number of days to a given date */
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-};
-
 /**
  * Based on data.transactions and data.currentBalance, update all
  * other data items.

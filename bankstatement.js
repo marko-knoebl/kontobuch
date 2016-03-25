@@ -5,8 +5,8 @@
 
 var bankStatement = {};
 
-(function() {
-
+(function () {
+  "use strict";
   bankStatement.csvImportConfig = {
     bawagpsk: {
       name: 'Bawag PSK',
@@ -14,11 +14,11 @@ var bankStatement = {};
       delimiter: ';',
       header: false,
       dateKey: 2,
-      dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+      dateNormalizer: function (date) {return date.split('.').reverse().join('-');},
       amountKey: 4,
       detailsKey: 1,
       // replace repeated spaces with just one space
-      detailsNormalizer: function(details) {return details.replace(/  +/g, ' ')},
+      detailsNormalizer: function(details) {return details.replace(/  +/g, ' ');},
       reverse: true
     },
     raiffeisen: {
@@ -162,7 +162,10 @@ var bankStatement = {};
     var date = this.transactions[0].date;
     while (date <= today) {
       // increase "date" and add all unprocessed transactions that occur before it
-      date = addDays(date, 1);
+      // copy the date
+      date = new Date(date.getTime());
+      // increase by one day
+      date.setDate(date.getDate() + 1)
       while (unprocessedTransactionIndex < this.transactions.length && this.transactions[unprocessedTransactionIndex].date < date) {
         previousBalance += this.transactions[unprocessedTransactionIndex].amount;
         unprocessedTransactionIndex ++;
