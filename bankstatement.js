@@ -97,7 +97,7 @@ var bankStatement = {};
 
   /**
    * An object representing a bank account
-   * constructor input:
+   * method importCsv:
    *   csv string: content of a csv file
    *   config: configuration object or bankname string
    *     encoding: encoding of the csv file
@@ -123,7 +123,10 @@ var bankStatement = {};
    *     {encoding: 'utf-8', delimiter: ',', header: false},
    *   );
    */
-  bankStatement.AccountData = function(csvString, config) {
+
+  bankStatement.BankAccount = function() {};
+
+  bankStatement.BankAccount.prototype.importCsv = function(csvString, config) {
     // if 'config' is a string assume it's the name of a bank
     if (typeof config === 'string') {
       if (bankStatement.csvImportConfig[config] === undefined) {

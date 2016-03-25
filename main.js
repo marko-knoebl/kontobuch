@@ -2,6 +2,8 @@
 
 /* jshint -W117 */
 
+var bankAccount;
+
 var data = {
   currentBalance: 0,
   // format: {date: ..., amount: ..., details: ..., category: ...}
@@ -69,8 +71,8 @@ var updateData = function() {
  * Read CSV data and update charts accordingly
  */
 var readCSVandUpdateChart = function(bankName, callback) {
-  var onComplete = function(accountData) {
-    data.transactions = accountData.transactions;
+  var onComplete = function(bankAccount) {
+    data.transactions = bankAccount.transactions;
     updateData();
     copyTransactionsToAngularScope();
     drawChart('dailyBalance');
@@ -81,8 +83,9 @@ var readCSVandUpdateChart = function(bankName, callback) {
   var encoding = csvImportConfig[bankName].encoding;
   var reader = new FileReader();
   reader.onload = function(event) {
-    var accountData = new bankStatement.AccountData(event.target.result, bankName);
-    onComplete(accountData);
+    bankAccount = new bankStatement.BankAccount();
+    bankAccount.importCsv(event.target.result, bankName)
+    onComplete(bankAccount);
   };
   reader.readAsText(csvFile, encoding);
 };
