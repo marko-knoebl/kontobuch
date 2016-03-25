@@ -96,37 +96,44 @@ var bankStatement = {};
   };
 
   /**
-   * input:
+   * An object representing a bank account
+   * constructor input:
    *   csv string: content of a csv file
    *   config: configuration object or bankname string
    *     encoding: encoding of the csv file
    *     delimiter: delimiter used in the csv file
    *     header: boolean: whether a header row is present
-   * output:
-   *   array consisting of chronological entries with these attributes:
+   *     dateKey: index or heading of the date column
+   *     amountKey: index or heading of the amount column
+   *     detailsKey: index or heading of the details column
+   *     dateNormalizer (optional): a function that takes the date and
+   *       returns an ISO date string
+   *     detailsNormalizer (optional): processes the details attribute
+   *     reverse: whether the csv data is in reverse chronological order
+   *
+   * The .transactions attribute is an array consisting of
+   *   chronological entries with these attributes:
    *     date: JavaScript Date object
    *     amount: transaction amount
    *     description: description as provided in the statement
    * example:
-   *   readCsv(myFile, 'bawagpsk');
-   *   readCsv(
-   *     myFile,
+   *   new AccountData(csvString, 'bawagpsk');
+   *   new AccountData(
+   *     csvString,
    *     {encoding: 'utf-8', delimiter: ',', header: false},
    *   );
    */
-  bankStatement.readCsvString = function(csvString, config) {
+  bankStatement.AccountData = function(csvString, config) {
+    // if 'config' is a string assume it's the name of a bank
     if (typeof config === 'string') {
-      config = bankStatement.csvImportConfig[config];
-      if (config === undefined) {
-        throw 'no import config available for: ' + config;
+      if (bankStatement.csvImportConfig[config] === undefined) {
+        throw 'No import config available for: ' + config;
       }
+      config = bankStatement.csvImportConfig[config];
       config.skipEmptyLines = true;
     }
-    var result = Papa.parse(csvString, config);
-    var transactions = result.data;
-    transactions = prepareTransactionData(transactions, config);
-
-    return transactions;
-  }
+    var transactions = Papa.parse(csvString, config).data;
+    this.transactions = prepareTransactionData(transactions, config);
+  };
 
 })();

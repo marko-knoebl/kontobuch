@@ -69,8 +69,8 @@ var updateData = function() {
  * Read CSV data and update charts accordingly
  */
 var readCSVandUpdateChart = function(bankName, callback) {
-  var onComplete = function(transactions) {
-    data.transactions = transactions;
+  var onComplete = function(accountData) {
+    data.transactions = accountData.transactions;
     updateData();
     copyTransactionsToAngularScope();
     drawChart('dailyBalance');
@@ -81,8 +81,8 @@ var readCSVandUpdateChart = function(bankName, callback) {
   var encoding = csvImportConfig[bankName].encoding;
   var reader = new FileReader();
   reader.onload = function(event) {
-    var csvData = bankStatement.readCsvString(event.target.result, bankName);
-    onComplete(csvData);
+    var accountData = new bankStatement.AccountData(event.target.result, bankName);
+    onComplete(accountData);
   };
   reader.readAsText(csvFile, encoding);
 };
