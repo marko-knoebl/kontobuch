@@ -123,7 +123,6 @@ var bankStatement = {};
    *     {encoding: 'utf-8', delimiter: ',', header: false},
    *   );
    */
-
   bankStatement.BankAccount = function() {};
 
   bankStatement.BankAccount.prototype.importCsv = function(csvString, config) {
@@ -137,6 +136,40 @@ var bankStatement = {};
     }
     var transactions = Papa.parse(csvString, config).data;
     this.transactions = prepareTransactionData(transactions, config);
+  };
+
+  bankStatement.BankAccount.prototype.setCurrentBalance = function(currentBalance) {
+    /**
+     * Adjust the initial account balance so the current balance fits the one provided
+     */
+    var transactionSum = 0;
+    this.transactions.forEach(function(transaction) {
+      transactionSum += transaction.amount;
+    });
+    this.initialBalance = currentBalance - transactionSum;
+    console.log(this.initialBalance)
+  };
+
+  bankStatement.BankAccount.prototype.calculateDailyBalances = function() {
+    if (this.initialBalance === undefined) {
+      throw 'initialBalance is undefined. Call "setCurrentBalance" first.';
+    }
+    var previousBalance = this.initialBalance;
+    var dailyBalances = [];
+    // index of the last unprocessed transaction
+    var unprocessedTransactionIndex = 0;
+    var today = new Date();
+    var date = this.transactions[0].date;
+    while (date <= today) {
+      // increase "date" and add all unprocessed transactions that occur before it
+      date = addDays(date, 1);
+      while (unprocessedTransactionIndex < this.transactions.length && this.transactions[unprocessedTransactionIndex].date < date) {
+        previousBalance += this.transactions[unprocessedTransactionIndex].amount;
+        unprocessedTransactionIndex ++;
+      }
+      dailyBalances.push({date: date, balance: previousBalance});
+    }
+    this.dailyBalances = dailyBalances;
   };
 
 })();
