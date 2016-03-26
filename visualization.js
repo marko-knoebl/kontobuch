@@ -33,7 +33,7 @@ var drawChart = function(chartName) {
       chartData__.dailyBalance.d3InputData[0].values = dailyBalancesToXY(data.dailyBalances);
       chartData__.dailyBalance.chart.update();
     } else if (chartName === 'expensesByCategory') {
-      var chartData = transactionsToExpensesByCategory(data.transactions);
+      var chartData = transactionsToExpensesByCategory(bankAccount.transactions);
       // update the existing data with new values
       for (var i in chartData) {
         chartData__.expensesByCategory.data[i] = chartData[i];
@@ -118,7 +118,7 @@ var transactionsToExpensesByCategory = function(transactions) {
 };
 
 var expensesByCategoryChartGenerator = function() {
-  var chartData = transactionsToExpensesByCategory(data.transactions);
+  var chartData = transactionsToExpensesByCategory(bankAccount.transactions);
   chartData__.expensesByCategory.data = chartData;
   chartData__.expensesByCategory.chart = nv.models.pieChart();
   chartData__.expensesByCategory.chart.showLegend(false);

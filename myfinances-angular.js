@@ -85,6 +85,6 @@ myFinancesModule.controller('TransactionsTableCtrl', function($scope) {
   $scope.transactions = [];
 
   copyTransactionsToAngularScope = function() {
-    $scope.transactions = data.transactions;
+    $scope.transactions = bankAccount.transactions;
   };
 })

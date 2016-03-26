@@ -6,8 +6,6 @@ var bankAccount;
 
 var data = {
   currentBalance: 0,
-  // format: {date: ..., amount: ..., details: ..., category: ...}
-  transactions: null,
   // format: {date: ..., balance: ...}
   dailyBalances: null
 };
@@ -27,21 +25,18 @@ var updateData = function() {
  * Read CSV data and update charts accordingly
  */
 var readCSVandUpdateChart = function(bankName, callback) {
-  var onComplete = function(bankAccount) {
+  var csvFile = document.querySelector('#file-input').files[0];
+  var encoding = konto.csvImportConfig[bankName].encoding;
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    bankAccount = new konto.BankAccount();
+    bankAccount.importCsv(event.target.result, bankName);
     data.transactions = bankAccount.transactions;
     updateData();
     copyTransactionsToAngularScope();
     drawChart('dailyBalance');
     drawChart('expensesByCategory');
     callback();
-  };
-  var csvFile = document.querySelector('#file-input').files[0];
-  var encoding = konto.csvImportConfig[bankName].encoding;
-  var reader = new FileReader();
-  reader.onload = function(event) {
-    bankAccount = new konto.BankAccount();
-    bankAccount.importCsv(event.target.result, bankName)
-    onComplete(bankAccount);
   };
   reader.readAsText(csvFile, encoding);
 };
@@ -64,8 +59,8 @@ var getCategoryLookupTable = function(categories) {
  */
 var categorizeTransactions = function() {
   var lookupTable = getCategoryLookupTable(categories);
-  for (var i = 0; i < data.transactions.length; i ++) {
-    var transaction = data.transactions[i];
+  for (var i = 0; i < bankAccount.transactions.length; i ++) {
+    var transaction = bankAccount.transactions[i];
     for (var keyword in lookupTable) {
       var regex = new RegExp(keyword, 'i');
       if (transaction.details.search(regex) > -1) {
