@@ -1,6 +1,10 @@
 <md-dialog>
   <md-toolbar>
-    <div class="md-toolbar-tools"><h2>New account</h2></div>
+    <div class="md-toolbar-tools" style="display:flex; justify-content:space-between"><h2>New Bawag PSK account</h2>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
   </md-toolbar>
   <md-dialog-content>
     <div class="md-dialog-content">
@@ -22,8 +26,7 @@
       </div>
     </div>
   </md-dialog-content>
-  <md-dialog-actions layout="row">
-    <span flex></span>
+  <md-dialog-actions>
     <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
   </md-dialog-actions>
 </md-dialog>
