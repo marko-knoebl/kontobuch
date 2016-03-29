@@ -56,41 +56,37 @@
 </style>
 
 <div ng-controller="TransactionsTableCtrl">
+  <div>
+    <md-input-container style="max-width: 240px; margin-left: 24px; margin-top: 24px">
+      <label>Sort by</label>
+      <md-select ng-model="query.order">
+        <md-option ng-repeat="option in [['date', 'Date (oldest first)'], ['-date', 'Date (newest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
+          {{option[1]}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]" style="float: right">
+    </md-table-pagination>
+    <div style="clear: both"></div>
+  </div>
 
-  <md-toolbar class="md-table-toolbar md-default" ng-hide="options.rowSelection && selected.length" >
-    <div class="md-toolbar-tools" style="display: flex; flex-wrap:wrap">
-      <div style="height: 64px; display: flex; flex-direction: row; align-items: center">Transactions</div>
-      <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]" style="flex-grow:1"></md-table-pagination>
+  <div>
+    <div ng-repeat="transaction in transactions | orderBy: query.order | limitTo: query.limit : (query.page-1)*query.limit" style="padding: 8px; display: flex; align-items: center">
+      <div style="display:flex; flex-grow:1; align-items: center">
+        <md-button aria-label="" class="md-icon-button" ng-click="$mdOpenMenu($event)" style="background-color: #3f51b5; color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0">
+          {{transaction.category | limitTo: 1}}
+        </md-button>
+        <div style="display: flex; flex-grow: 1; flex-wrap: wrap">
+          <div style="width: 120px; flex-grow: 1; font-size: 16px">{{transaction.category}}</div>
+          <div style="width: 120px; flex-grow: 3; overflow: hidden; max-height: 1.2em; whitespace: nowrap; text-overflow: ellipsis">
+            {{transaction.details}}
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; flex-grow: 1; justify-content: flex-end">
+        <div style="text-align: right; width: 96px; flex-grow: 1">{{transaction.date | date:'yyyy-MM-dd'}}</div>
+        <div style="text-align: right; width: 96px; flex-grow: 1; font-size: 16px" ng-class="{'transaction-positive': transaction.amount>0, 'transaction-negative': transaction.amount<0}">{{transaction.amount | number: 2}}</div>
+      </div>
     </div>
-  </md-toolbar>
-
-  <md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
-    <div class="md-toolbar-tools">
-      <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
-    </div>
-  </md-toolbar>
-
-  <md-table-container>
-    <table md-table ng-model="selected" md-progress="promise">
-      <thead md-head md-order="query.order">
-        <tr md-row>
-          <th md-column md-order-by="date"><span>Date</span></th>
-          <th md-column md-order-by="details"><span>Details</span></th>
-          <th md-column md-order-by="category"><span>Category</span></th>
-          <th md-column md-numeric md-order-by="amount"><span>Amount (€)</span></th>
-        </tr>
-      </thead>
-      <tbody md-body>
-        <tr md-row md-select="transaction" md-auto-select="options.autoSelect" ng-repeat="transaction in transactions | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page -1) * query.limit">
-          <td md-cell>{{transaction.date | date:'yyyy-MM-dd'}}</td>
-          <td md-cell>
-            {{transaction.details | limitTo: 30}}{{transaction.details.length > 30 ? '...' : ''}}
-            <md-tooltip md-direction="bottom">{{transaction.details}}</md-tooltip>
-          </td>
-          <td md-cell>{{transaction.category}}</td>
-          <td md-cell ng-class="{'transaction-positive': transaction.amount>0, 'transaction-negative': transaction.amount<0}">{{transaction.amount | number: 2}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </md-table-container>
+  </div>
 </div>
