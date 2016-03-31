@@ -111,7 +111,8 @@ var transactionsToExpensesByCategory = function(transactions) {
     expensesByCategoryD3.push({
       x: category,
       // set all income to 0
-      y: Math.max(-categoryTotals[category], 0)
+      y: Math.max(-categoryTotals[category], 0),
+      color: categoriesByName[category].color
     });
   }
   return expensesByCategoryD3;
@@ -122,6 +123,10 @@ var expensesByCategoryChartGenerator = function() {
   chartData__.expensesByCategory.data = chartData;
   chartData__.expensesByCategory.chart = nv.models.pieChart();
   chartData__.expensesByCategory.chart.showLegend(false);
+  chartData__.expensesByCategory.chart.donut(true);
+  chartData__.expensesByCategory.chart.labelsOutside(true);
+  chartData__.expensesByCategory.chart.donutRatio(0.3);
+  chartData__.expensesByCategory.chart.padAngle(0.01);
   d3.select('#chart-expenses-by-category-container').append('svg')
     .datum(chartData)
     .call(chartData__.expensesByCategory.chart);

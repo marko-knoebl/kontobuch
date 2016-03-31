@@ -55,6 +55,8 @@ myFinancesModule.controller('TransactionsTableCtrl', function($scope) {
 
   $scope.transactions = [];
 
+  $scope.categoriesByName = categoriesByName;
+
   copyTransactionsToAngularScope = function() {
     $scope.transactions = bankAccount.transactions;
   };
