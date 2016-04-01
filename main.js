@@ -3,42 +3,35 @@
 /* jshint -W117 */
 
 var bankAccount;
-
-var data = {
-  currentBalance: 0,
-  // format: {date: ..., balance: ...}
-  dailyBalances: null
-};
+bankAccount = new konto.BankAccount();
 
 /**
- * Based on data.transactions and data.currentBalance, update all
- * other data items.
+ * Read the selected CSV file and pass its content to the callback
  */
-var updateData = function() {
-  bankAccount.setCurrentBalance(data.currentBalance);
-  bankAccount.calculateDailyBalances();
-  data.dailyBalances = bankAccount.dailyBalances;
-  categorizeTransactions();
-};
-
-/**
- * Read CSV data and update charts accordingly
- */
-var readCSVandUpdateChart = function(bankName, callback) {
+var getCsvFileContent = function(bankName, callback) {
   var csvFile = document.querySelector('#file-input').files[0];
   var encoding = konto.csvImportConfig[bankName].encoding;
   var reader = new FileReader();
   reader.onload = function(event) {
-    bankAccount = new konto.BankAccount();
-    bankAccount.importCsv(event.target.result, bankName);
-    data.transactions = bankAccount.transactions;
-    updateData();
-    copyTransactionsToAngularScope();
-    drawChart('dailyBalance');
-    drawChart('expensesByCategory');
-    callback();
+    callback(event.target.result);
   };
   reader.readAsText(csvFile, encoding);
+};
+
+/**
+ * Read the transaction data,
+ * calculate daily balances,
+ * categorize transactions,
+ * then redraw charts
+ * (and close the dialog)
+ */
+var updateCharts = function(callback) {
+  bankAccount.calculateDailyBalances();
+  categorizeTransactions();
+  copyTransactionsToAngularScope();
+  drawChart('dailyBalance');
+  drawChart('expensesByCategory');
+  callback();
 };
 
 /**

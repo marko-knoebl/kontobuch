@@ -30,7 +30,7 @@ var drawChart = function(chartName) {
   } else {
     // update existing chart
     if (chartName === 'dailyBalance') {
-      chartData__.dailyBalance.d3InputData[0].values = dailyBalancesToXY(data.dailyBalances);
+      chartData__.dailyBalance.d3InputData[0].values = dailyBalancesToXY(bankAccount.dailyBalances);
       chartData__.dailyBalance.chart.update();
     } else if (chartName === 'expensesByCategory') {
       var chartData = transactionsToExpensesByCategory(bankAccount.transactions);
@@ -75,7 +75,7 @@ var dailyBalanceGraphGenerator = function() {
     .tickFormat(d3.format('d'))
   ;
   balanceChart.showLegend(false);
-  var points = dailyBalancesToXY(data.dailyBalances);
+  var points = dailyBalancesToXY(bankAccount.dailyBalances);
   if (points.length > 150) {
     // reduce number of points by only taking into account transactions with an amount > 50
     var i = 1;

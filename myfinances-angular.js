@@ -14,9 +14,13 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
     var controller = function($scope, $mdDialog) {
       $scope.cancel = $mdDialog.cancel;
       $scope.processOKClicked = function() {
-        data.currentBalance = $scope.currentBalance;
+
+        getCsvFileContent(bank, function(csvContent) {
+          bankAccount.importCsv(csvContent, bank);
+          bankAccount.setCurrentBalance($scope.currentBalance);
+          updateCharts($mdDialog.hide);
+        });
         //$scope.$parent.currentBalance = data.currentBalance;
-        readCSVandUpdateChart(bank, $mdDialog.hide);
       };
     };
     $mdDialog.show({
