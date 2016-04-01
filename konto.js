@@ -138,6 +138,27 @@ var konto = {};
     this.transactions = prepareTransactionData(transactions, config);
   };
 
+  /**
+   * Load data of the following format:
+   *  [
+   *    {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
+   *    {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
+   *  ]
+   */
+  konto.BankAccount.prototype.loadTransactionData = function(transactionData) {
+    // copy the input data
+    var transactions = [];
+    transactionData.forEach(function(transaction) {
+      // add a copy of the original data
+      transactions.push({
+        date: new Date(transaction.date.getTime()),
+        amount: transaction.amount,
+        details: transaction.details
+      });
+    });
+    this.transactions = transactions;
+  };
+
   konto.BankAccount.prototype.setCurrentBalance = function(currentBalance) {
     /**
      * Adjust the initial account balance so the current balance fits the one provided

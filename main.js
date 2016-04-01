@@ -31,7 +31,7 @@ var updateCharts = function(callback) {
   copyTransactionsToAngularScope();
   drawChart('dailyBalance');
   drawChart('expensesByCategory');
-  callback();
+  if(callback) {callback()};
 };
 
 /**

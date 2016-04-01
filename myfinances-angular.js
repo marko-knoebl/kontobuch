@@ -33,6 +33,38 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
       fullscreen: true
     });
   };
+  $scope.loadSampleData = function() {
+    var sampleData = [
+      {
+        date: new Date('2016-01-01'),
+        amount: 1423.89,
+        details: 'Gehalt Dezember 2015'
+      },
+      {
+        date: new Date('2016-01-13'),
+        amount: -34.49,
+        details: 'Shell Tankstelle'
+      },
+      {
+        date: new Date('2016-01-15'),
+        amount: -6.99,
+        details: 'McDonalds'
+      },
+      {
+        date: new Date('2016-01-15'),
+        amount: -17.23,
+        details: 'Billa'
+      },
+      {
+        date: new Date('2016-01-20'),
+        amount: -26.30,
+        details: 'Amazon'
+      }
+    ];
+    bankAccount.loadTransactionData(sampleData);
+    bankAccount.setCurrentBalance(2300);
+    updateCharts();
+  };
 });
 
 var copyTransactionsToAngularScope;
