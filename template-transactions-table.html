@@ -1,4 +1,3 @@
-
 <style>
   .md-table-pagination {
     border-top: 0px none black;
@@ -11,38 +10,22 @@
   }
 </style>
 
-<div ng-controller="TransactionsTableCtrl" style="height: 100%">
-  <div style="box-shadow: 0px 1px 3px rgba(0,0,0,0.35);">
-    <md-input-container style="max-width: 240px; margin-left: 24px; margin-top: 24px">
-      <label>Sort by</label>
-      <md-select ng-model="query.order">
-        <md-option ng-repeat="option in [['date', 'Date (newest first)'], ['-date', 'Date (oldest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
-          {{option[1]}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]" style="float: right">
-    </md-table-pagination>
-    <div style="clear: both"></div>
-  </div>
-
-  <div style="overflow: auto; height: calc(100% - 80px)">
-    <div ng-repeat="transaction in transactions | orderBy: query.order | limitTo: query.limit : (query.page-1)*query.limit" style="padding: 8px; display: flex; align-items: center">
-      <div style="display:flex; flex-grow:2; align-items: center">
-        <md-button aria-label="" class="md-icon-button" ng-click="$mdOpenMenu($event)" style="color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0" ng-style="{'background-color' : categoriesByName[transaction.category].color}">
-          {{transaction.category | limitTo: 1}}
-        </md-button>
-        <div style="display: flex; flex-grow: 1; flex-wrap: wrap">
-          <div style="width: 120px; flex-grow: 1; font-size: 16px">{{transaction.category}}</div>
-          <div style="width: 120px; flex-grow: 3; overflow: hidden; max-height: 1.2em; whitespace: nowrap; text-overflow: ellipsis">
-            {{transaction.details}}
-          </div>
+<div style="overflow: auto;">
+  <div ng-repeat="transaction in transactions | orderBy: query.order | limitTo: query.limit : (query.page-1)*query.limit" style="padding: 8px; display: flex; align-items: center">
+    <div style="display:flex; flex-grow:2; align-items: center">
+      <md-button aria-label="" class="md-icon-button" ng-click="$mdOpenMenu($event)" style="color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0" ng-style="{'background-color' : categoriesByName[transaction.category].color}">
+        {{transaction.category | limitTo: 1}}
+      </md-button>
+      <div style="display: flex; flex-grow: 1; flex-wrap: wrap">
+        <div style="width: 120px; flex-grow: 1; font-size: 16px">{{transaction.category}}</div>
+        <div style="width: 120px; flex-grow: 3; overflow: hidden; max-height: 1.2em; whitespace: nowrap; text-overflow: ellipsis">
+          {{transaction.details}}
         </div>
       </div>
-      <div style="display: flex; flex-wrap: wrap; flex-grow: 1; justify-content: flex-end">
-        <div style="text-align: right; width: 96px; flex-grow: 1">{{transaction.date | date:'yyyy-MM-dd'}}</div>
-        <div style="text-align: right; width: 96px; flex-grow: 1; font-size: 16px" ng-class="{'transaction-positive': transaction.amount>0, 'transaction-negative': transaction.amount<0}">{{transaction.amount | number: 2}}</div>
-      </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; flex-grow: 1; justify-content: flex-end">
+      <div style="text-align: right; width: 96px; flex-grow: 1">{{transaction.date | date:'yyyy-MM-dd'}}</div>
+      <div style="text-align: right; width: 96px; flex-grow: 1; font-size: 16px" ng-class="{'transaction-positive': transaction.amount>0, 'transaction-negative': transaction.amount<0}">{{transaction.amount | number: 2}}</div>
     </div>
   </div>
 </div>

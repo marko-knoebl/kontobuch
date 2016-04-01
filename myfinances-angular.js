@@ -6,7 +6,7 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages',
 
 // Angular setup
 
-myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMedia) {
+myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSidenav, $mdMedia) {
   $scope.currentBalance = 0;
   $scope.csvImportConfig = konto.csvImportConfig;
   $scope.showNewAccountDialog = function(event, bank) {
@@ -33,6 +33,44 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
       fullscreen: true
     });
   };
+
+  $scope.toggleLeftMenu = function() {
+    $mdSidenav('left').toggle().then(function() {
+      chartData__.expensesByCategory.chart.update();
+      chartData__.dailyBalance.chart.update();
+    });
+  };
+
+  $scope.active = 'balance';
+
+
+  // data belonging to the table
+  $scope.selected = [];
+
+  $scope.options = {
+    // select a row on click
+    autoSelect: false,
+    boundaryLinks: true,
+    largeEditDialog: false,
+    pageSelector: false,
+    rowSelection: true
+  };
+
+  $scope.query = {
+    order: '-date',
+    limit: 10,
+    page: 1
+  };
+
+  $scope.transactions = [];
+
+  $scope.categoriesByName = categoriesByName;
+
+  copyTransactionsToAngularScope = function() {
+    $scope.transactions = bankAccount.transactions;
+  };
+
+
   $scope.loadSampleData = function() {
     var sampleData = [
       {
@@ -69,31 +107,3 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdMed
 
 var copyTransactionsToAngularScope;
 
-myFinancesModule.controller('TransactionsTableCtrl', function($scope) {
-  // based on:
-  // https://github.com/daniel-nagy/md-data-table
-  $scope.selected = [];
-
-  $scope.options = {
-    // select a row on click
-    autoSelect: false,
-    boundaryLinks: true,
-    largeEditDialog: false,
-    pageSelector: false,
-    rowSelection: true
-  };
-
-  $scope.query = {
-    order: '-date',
-    limit: 10,
-    page: 1
-  };
-
-  $scope.transactions = [];
-
-  $scope.categoriesByName = categoriesByName;
-
-  copyTransactionsToAngularScope = function() {
-    $scope.transactions = bankAccount.transactions;
-  };
-})
