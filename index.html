@@ -47,6 +47,13 @@
         min-width: 240px;
         height: 20%;
       }
+      #chart-dailybalance-container svg,
+      #chart-expenses-by-category-container svg {
+        position: absolute;
+        flex-grow: 1;
+        bottom: 0px;
+        top: 0px
+      }
     </style>
 
     <div id="new-account-button" style="display: flex; align-items: center; margin-left: 16px">
@@ -114,8 +121,8 @@
         </md-list>
       </md-sidenav>
 
-      <div style="height: 100%;" ng-show="active == 'balance'" id="chart-dailybalance-container"></div>
-      <div style="height: 100%;" ng-show="active =='expenses'" id="chart-expenses-by-category-container"></div>
+      <div style="flex-grow: 1; position: relative" ng-show="active == 'balance'" id="chart-dailybalance-container"></div>
+      <div style="flex-grow: 1; position: relative" ng-show="active =='expenses'" id="chart-expenses-by-category-container"></div>
       <div ng-show="active == 'transactions'" id="transactions-table-container" ng-include="'template-transactions-table.html'" style="overflow: auto"></div>
     </div>
 
