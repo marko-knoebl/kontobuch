@@ -9,6 +9,9 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages',
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSidenav, $mdMedia) {
   $scope.currentBalance = 0;
   $scope.csvImportConfig = konto.csvImportConfig;
+
+  $scope.isChromeApp = Boolean(window.chrome && chrome.app && chrome.app.runtime);
+
   $scope.showNewAccountDialog = function(event, bank) {
     // create a new controller corresponding to the selected bank
     var controller = function($scope, $mdDialog) {
@@ -32,6 +35,28 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
       targetEvent: event,
       fullscreen: true
     });
+  };
+
+  $scope.showBawagpskCredentialsDialog = function(event) {
+    var controller = function($scope, $mdDialog) {
+      $scope.cancel = $mdDialog.cancel;
+      $scope.processOKClicked = function() {
+        getBawagpskCsvTransactionData($scope.login, $scope.password, function(transactionData) {
+          bankAccount.importCsv(transactionData, 'bawagpsk');
+          bankAccount.setCurrentBalance(0);
+          updateCharts($mdDialog.hide);
+        });
+      };
+    };
+    $mdDialog.show({
+      templateUrl: 'template-bawagpsk-credentials.html',
+      clickOutsideToClose: true,
+      controller: controller,
+      // create ne child scope of the global angular scope
+      scope: $scope.$new(),
+      targetEvent: event,
+      //fullscreen: true
+    })
   };
 
   $scope.toggleLeftMenu = function() {

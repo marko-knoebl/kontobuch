@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "name": "Kontobuch",
+  "version": "0.1",
+
+  "description": "Track your expenses",
+
+  "permissions": [
+    "https://ebanking.bawagpsk.com/"
+  ]
+}
