@@ -41,9 +41,9 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     var controller = function($scope, $mdDialog) {
       $scope.cancel = $mdDialog.cancel;
       $scope.processOKClicked = function() {
-        getBawagpskCsvTransactionData($scope.login, $scope.password, function(transactionData) {
-          bankAccount.importCsv(transactionData, 'bawagpsk');
-          bankAccount.setCurrentBalance(0);
+        getBawagpskAccountData($scope.login, $scope.password, function(accountData) {
+          bankAccount.importCsv(accountData.csvString, 'bawagpsk');
+          bankAccount.setCurrentBalance(accountData.currentBalance);
           updateCharts($mdDialog.hide);
         });
       };

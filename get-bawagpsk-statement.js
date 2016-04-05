@@ -10,7 +10,7 @@
  * (e.g. in a properly configured Chrome app)
  * It does not work in regular websites
  */
-var getBawagpskCsvTransactionData = function(login, password, callback) {
+var getBawagpskAccountData = function(login, password, callback) {
   /*
     Data can be downloaded manually from the BawagPSK website
     by following these steps:
@@ -71,9 +71,15 @@ var getBawagpskCsvTransactionData = function(login, password, callback) {
     var loginRequest = new XMLHttpRequest();
     loginRequest.onreadystatechange = function() {
       if (loginRequest.readyState === 4 && loginRequest.status === 200) {
+
+        var currentBalanceRegex = /<td class="tdright"><span[\s\S]*?>([\s\S]*?) EUR/;
+        var currentBalanceText = currentBalanceRegex
+          .exec(loginRequest.response)[1].replace('.', '').replace(',', '');
+        var currentBalance = parseInt(currentBalanceText) / 100;
+
         var findAction = /InternetBanking\/InternetBanking\/(\S*\?)d=login/;
         var action = findAction.exec(loginRequest.responseURL)[1];
-        downloadBawagpskCsvTransactionData(action);
+        downloadBawagpskCsvTransactionData(action, currentBalance);
       }
     };
     loginRequest.open('POST', 'https://ebanking.bawagpsk.com' + action);
@@ -81,13 +87,13 @@ var getBawagpskCsvTransactionData = function(login, password, callback) {
     loginRequest.send(formData);
   };
 
-  var downloadBawagpskCsvTransactionData = function(action) {
+  var downloadBawagpskCsvTransactionData = function(action, currentBalance) {
     var formData = 'svc=PSK&d=transactions&pagenumber=1&submitflag=true&suppressOverlay=true&print=false&csv=true&accountChanged=false&newSearch=false&sortingColumn=BOOKING_DATE&sortingDirection=-1&lastviewed=&outstandingBalance=&searchPanelShown=false&initialRowsPerPage=10&konto=0&datefrom=&datetill=&betvon=&centsvon=&betbis=&centsbis=&buchungstext=&umsatzart=-1&enlargementOfTransaction=0&rowsPerPage=10';
 
     var csvDownloadRequest = new XMLHttpRequest();
     csvDownloadRequest.onreadystatechange = function() {
       if (csvDownloadRequest.readyState === 4 && csvDownloadRequest.status === 200) {
-        callback(csvDownloadRequest.responseText);
+        callback({csvString: csvDownloadRequest.responseText, currentBalance: currentBalance});
       }
     };
     csvDownloadRequest.open('POST', 'https://ebanking.bawagpsk.com/InternetBanking/InternetBanking/' + action);
