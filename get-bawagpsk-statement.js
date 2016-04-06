@@ -28,6 +28,24 @@ var getBawagpskAccountData = function(login, password, callback) {
     callback()
   */
 
+  /*
+    how the csv file is obtained
+    * GET-request to: https://ebanking.bawagpsk.com/InternetBanking/InternetBanking?d=login&svc=BAWAG&ui=html&lang=de
+    * The reply is an HTML document containing a single form element
+    * The form element has the attribute "action" which could have
+      the following value:
+      "/InternetBanking/InternetBanking/0442089097$"
+    * Clicking the "login" button would cause a post-request to
+      "https://ebanking.bawagpsk.com" + action
+    * The reply to the POST-request has the header location
+      "/InternetBanking/InternetBanking/0480576193$?d=login&isgetprg=true"
+      The 10-digit number will be used for all further requests to the server
+    * New requests will always be post-requests to the above location with the
+      "d" parameter determining the provided resource
+    * The CSV file can be obtained by requesting the location "d:transactions"
+      with "csv:true" and other parameters set accordingly
+  */
+
   var getBawagpskLoginPage = function(login, password) {
     var loginPageRequest = new XMLHttpRequest();
     loginPageRequest.onreadystatechange = function() {
