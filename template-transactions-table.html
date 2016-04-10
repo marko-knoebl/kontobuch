@@ -1,7 +1,4 @@
 <style>
-  .md-table-pagination {
-    border-top: 0px none black;
-  }
   .transaction-positive {
     color: #3d9400 !important;
   }
@@ -10,8 +7,8 @@
   }
 </style>
 
-<div style="overflow: auto;">
-  <div ng-repeat="transaction in transactions | orderBy: query.order | limitTo: query.limit : (query.page-1)*query.limit" style="padding: 8px; display: flex; align-items: center">
+<div vs-repeat vs-scroll-parent="#transactions-table-container" style="overflow: auto">
+  <div ng-repeat="transaction in transactions | orderBy: query.order" style="padding: 8px; display: flex; align-items: center">
     <div style="display:flex; flex-grow:2; align-items: center">
       <md-button aria-label="" class="md-icon-button" ng-click="$mdOpenMenu($event)" style="color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0" ng-style="{'background-color' : categoriesByName[transaction.category].color}">
         {{transaction.category | limitTo: 1}}

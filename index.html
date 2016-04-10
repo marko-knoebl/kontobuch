@@ -63,6 +63,7 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-vs-repeat/src/angular-vs-repeat.js"></script>
 
     <!-- md-datatable -->
     <link href="bower_components/angular-material-data-table/dist/md-data-table.min.css" rel="stylesheet" type="text/css"/>
@@ -145,8 +146,6 @@
                 </md-option>
               </md-select>
             </md-input-container>
-            <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{transactions.length}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination" md-options="[10, 50, 100]" style="float: right">
-            </md-table-pagination>
             <div style="clear: both"></div>
           </div>
         </div>
@@ -174,7 +173,7 @@
 
       <div style="flex-grow: 1; position: relative" ng-show="active == 'balance'" id="chart-dailybalance-container"></div>
       <div style="flex-grow: 1; position: relative" ng-show="active =='expenses'" id="chart-expenses-by-category-container"></div>
-      <div ng-show="active == 'transactions'" id="transactions-table-container" ng-include="'template-transactions-table.html'" style="overflow: auto"></div>
+      <div ng-show="active == 'transactions'" id="transactions-table-container" ng-include="'template-transactions-table.html'" style="flex-grow: 1; overflow: auto"></div>
     </div>
 
     <script src="konto.js"></script>

@@ -2,7 +2,7 @@
 
 /* jshint -W117 */
 
-var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages', 'md.data.table']);
+var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages', 'md.data.table', 'vs-repeat']);
 
 // Angular setup
 
