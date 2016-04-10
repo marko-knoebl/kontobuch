@@ -141,7 +141,7 @@
             <md-input-container style="max-width: 240px; margin-left: 24px; margin-top: 15px; margin-bottom: 15px">
               <label>Sort by</label>
               <md-select ng-model="query.order">
-                <md-option ng-repeat="option in [['date', 'Date (newest first)'], ['-date', 'Date (oldest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
+                <md-option ng-repeat="option in [['-date', 'Date (newest first)'], ['date', 'Date (oldest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
                   {{option[1]}}
                 </md-option>
               </md-select>
