@@ -8,7 +8,7 @@
 </style>
 
 <div vs-repeat vs-scroll-parent="#transactions-table-container" vs-excess="16" style="overflow: auto">
-  <div ng-repeat="transaction in transactions | orderBy: query.order" style="padding: 8px; display: flex; align-items: center">
+  <div ng-repeat="transaction in transactions | orderBy: query.order" style="margin: 16px 8px 16px 8px; display: flex; align-items: center; cursor: pointer" ng-click="$parent.$parent.$parent.transactionTableSelectionId = transaction.id; transactionDetailsDialog($event)">
     <div style="display:flex; flex-grow:2; align-items: center">
       <md-button aria-label="" class="md-icon-button" ng-click="$mdOpenMenu($event)" style="color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0" ng-style="{'background-color' : categoriesByName[transaction.category].color}">
         {{transaction.category | limitTo: 1}}

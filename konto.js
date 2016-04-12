@@ -58,8 +58,8 @@ var konto = {};
   /**
    * Takes raw, bank-specific transaction data and returns a nicer format:
    *  [
-   *    {date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
-   *    {date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
+   *    {id: 0, date: 2011-03-07, amount: 107.5, details: 'gas station ...'},
+   *    {id: 1, date: 2011-03-10, amount: -23.05, details: 'LSR...'},...
    *  ]
    *  @param {Array} rawTransactionData - Transaction data in a bank-specific CSV form
    *  @param {object} config
@@ -69,8 +69,8 @@ var konto = {};
     if (config.reverse) {
       rawTransactionData.reverse();
     }
-    for (var i = 0; i <= rawTransactionData.length-1; i ++) {
-      var date = rawTransactionData[i][config.dateKey];
+    rawTransactionData.forEach(function(item, index) {
+      var date = item[config.dateKey];
       if (config.dateNormalizer) {
         date = config.dateNormalizer(date);
       }
@@ -78,13 +78,13 @@ var konto = {};
         throw 'invalid input: date'
       }
       date = new Date(date + 'T00:00:00');
-      var amount = parseFloat(rawTransactionData[i][config.amountKey].replace('.', '').replace(',', '.'));
-      var details = rawTransactionData[i][config.detailsKey];
+      var amount = parseFloat(item[config.amountKey].replace('.', '').replace(',', '.'));
+      var details = item[config.detailsKey];
       if (config.detailsNormalizer) {
         details = config.detailsNormalizer(details);
       }
-      transactionData.push({date: date, amount: amount, details: details});
-    }
+      transactionData.push({date: date, amount: amount, details: details, id: index});
+    });
     var invalid = (
       transactionData.length === 0 ||
       transactionData[0].date > transactionData[transactionData.length - 1].date
@@ -153,7 +153,8 @@ var konto = {};
       transactions.push({
         date: new Date(transaction.date.getTime()),
         amount: transaction.amount,
-        details: transaction.details
+        details: transaction.details,
+        id: transaction.id
       });
     });
     this.transactions = transactions;

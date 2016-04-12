@@ -59,6 +59,22 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     })
   };
 
+  $scope.transactionDetailsDialog = function(event) {
+    var controller = function($scope, $mdDialog) {
+      $scope.cancel = $mdDialog.cancel;
+    };
+    $mdDialog.show({
+      templateUrl: 'templates/template-transaction-details.html',
+      clickOutsideToClose: true,
+      controller: controller,
+      targetEvent: event,
+      scope: $scope.$new(),
+      fullscreen: true
+    });
+  };
+
+  $scope.transactionTableSelectionId = 23;
+
   $scope.toggleLeftMenu = function() {
     $mdSidenav('left').toggle().then(function() {
       chartData__.expensesByCategory.chart.update();
@@ -89,6 +105,8 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
 
   $scope.transactions = [];
 
+  $scope.categories = categories;
+
   $scope.categoriesByName = categoriesByName;
 
   copyTransactionsToAngularScope = function() {
@@ -99,26 +117,31 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
   $scope.loadSampleData = function() {
     var sampleData = [
       {
+        id: 0,
         date: new Date('2016-01-01'),
         amount: 1423.89,
         details: 'Gehalt Dezember 2015'
       },
       {
+        id: 1,
         date: new Date('2016-01-13'),
         amount: -34.49,
         details: 'Shell Tankstelle'
       },
       {
+        id: 2,
         date: new Date('2016-01-15'),
         amount: -6.99,
         details: 'McDonalds'
       },
       {
+        id: 3,
         date: new Date('2016-01-15'),
         amount: -17.23,
         details: 'Billa'
       },
       {
+        id: 4,
         date: new Date('2016-01-20'),
         amount: -26.30,
         details: 'Amazon'
