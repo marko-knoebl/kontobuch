@@ -14,7 +14,7 @@
       <md-input-container class="md-block" style="padding-left: 0px; padding-right: 0px; margin-bottom: 8px">
         <label>Category</label>
         <md-select ng-model="transactions[transactionTableSelectionId].category">
-          <md-option ng-repeat="category in categories" value="{{category.name}}">
+          <md-option ng-repeat="category in categories | orderBy: 'name'" value="{{category.name}}">
             {{category.name}}
           </md-option>
         </md-select>
