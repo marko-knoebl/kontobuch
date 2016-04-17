@@ -101,36 +101,7 @@
       }
     </style>
 
-    <div id="new-account-button" style="display: flex; align-items: center; margin-left: 16px">
-      <md-menu>
-        <md-button aria-label="Open demo menu" class="md-fab" ng-click="$mdOpenMenu($event)">
-          <md-icon md-menu-origin>add</md-icon>
-        </md-button>
-        <md-menu-content>
-          <!--TODO: don't hard-code banknames-->
-          <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'hellobank', 'paypal']">
-            <md-button ng-click="showNewAccountDialog($event, bankname)">
-              <md-icon md-menu-align-target>add</md-icon>
-              {{csvImportConfig[bankname].name}}
-            </md-button>
-          </md-menu-item>
-          <!-- display direct Bawag import if this is running as a  Chrome app-->
-          <md-menu-item ng-if="isChromeApp">
-            <md-button ng-click="showBawagpskCredentialsDialog($event)">
-              <md-icon md-menu-align-target>add</md-icon>
-              Bawag PSK (direct)
-            </md-button>
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
-      <div style="font-size: 24px;  margin-left: 8px">Add account</div>
-    </div>
-
-    <div id="load-sample-data-button" style="margin-left: 16px; bottom: 16px; position: absolute" ng-click="loadSampleData()">
-      <md-button>Load Sample Data</md-button>
-    </div>
-
-    <div id="charts" style="height:100%; display:none; flex-direction: column; overflow: auto">
+    <div id="charts" style="height:100%; flex-direction: column; overflow: auto; display: flex">
 
       <md-toolbar class="md-whiteframe-4dp" style="display: flex; flex-shrink: 0">
         <div class="md-toolbar-tools" style="height: auto; max-height: none; min-height: 64px">
@@ -171,6 +142,34 @@
           <md-list-item ng-click="active = 'categories'; toggleLeftMenu()">
             <md-icon style="margin-left: 0px">style</md-icon>
             Categories
+          </md-list-item>
+          <md-list-item>
+            <md-menu>
+              <md-list-item ng-click="$mdOpenMenu($event)">
+                <md-icon style="margin-left: 0px">add</md-icon>
+                Load Account
+              </md-list-item>
+              <md-menu-content>
+                <!--TODO: don't hard-code banknames-->
+                <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'hellobank', 'paypal']">
+                  <md-button ng-click="showNewAccountDialog($event, bankname); toggleLeftMenu()">
+                    <md-icon md-menu-align-target>add</md-icon>
+                    {{csvImportConfig[bankname].name}}
+                  </md-button>
+                </md-menu-item>
+                <!-- display direct Bawag import if this is running as a  Chrome app-->
+                <md-menu-item ng-if="isChromeApp">
+                  <md-button ng-click="showBawagpskCredentialsDialog($event); toggleLeftMenu()">
+                    <md-icon md-menu-align-target>add</md-icon>
+                    Bawag PSK (direct)
+                  </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-list-item>
+          <md-list-item ng-click="loadSampleData(); toggleLeftMenu()">
+            <md-icon style="margin-left: 0px">add</md-icon>
+            Load Sample Data
           </md-list-item>
         </md-list>
       </md-sidenav>

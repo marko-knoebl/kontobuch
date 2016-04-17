@@ -25,9 +25,6 @@ var drawChart = function(chartName) {
   if (!chartData__[chartName].drawn) {
     chartData__[chartName].drawn = true;
     nv.addGraph(chartData__[chartName].generator);
-    document.querySelector('#charts').style.display = 'flex';
-    document.querySelector('#new-account-button').style.display = 'none';
-    document.querySelector('#load-sample-data-button').style.display = 'none';
   } else {
     // update existing chart
     if (chartName === 'dailyBalance') {

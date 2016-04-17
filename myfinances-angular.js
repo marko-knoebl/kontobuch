@@ -93,8 +93,12 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
 
   $scope.toggleLeftMenu = function() {
     $mdSidenav('left').toggle().then(function() {
-      chartData__.expensesByCategory.chart.update();
-      chartData__.dailyBalance.chart.update();
+      if (chartData__.expensesByCategory.chart) {
+        chartData__.expensesByCategory.chart.update();
+      }
+      if (chartData__.dailyBalance.chart) {
+        chartData__.dailyBalance.chart.update();
+      }
     });
   };
 
