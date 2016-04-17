@@ -46,6 +46,15 @@ var categories = [
     color: '#009688'
 	},
   {
+    name: 'transfers',
+    keywords: [],
+    label: {
+      de: 'Umbuchungen',
+      en: 'Transfers'
+    },
+    color: '#607d8b'
+  },
+  {
     name: 'expenses',
     keywords: [],
     label: {
@@ -61,7 +70,8 @@ var categories = [
       de: 'Schulden',
       en: 'Debts'
     },
-    color: '#607d8b'
+    color: '#607d8b',
+    parent: 'transfers'
   },
 	{
 		name: 'self',
@@ -72,17 +82,17 @@ var categories = [
       de: 'Eigene',
       en: 'Self'
     },
-    parent: 'expenses',
-    color: '#607d8b'
+    color: '#607d8b',
+    parent: 'transfers'
 	},
 	{
 		name: 'atm',
-		keywords: ['auszahlung', 'ATM ', 'SB-BEHEBUNG', 'AUTOMAT', 'BANKOMAT'],
+		keywords: ['auszahlung', 'ATM ', 'SB-BEHEBUNG', ' AUTOMAT ', 'BANKOMAT'],
     label: {
       de: 'Banko&shy;mat',
       en: 'ATM'
     },
-    parent: 'self',
+    parent: 'transfers',
     color: '#607d8b'
 	},
 	{
@@ -126,25 +136,45 @@ var categories = [
     color: '#2196f3'
 	},
   {
-    name: 'food',
-    keywords: ['MCDONALDS'],
+    name: 'food & household',
+    keywords: [],
     label: {
-      de: 'Essen',
-      en: 'Food'
+      de: 'Lebensmittel und Haushalt',
+      en: 'Food and Household'
     },
     parent: 'expenses',
     color: '#00bcd4'
   },
 	{
-		name: 'groceries',
+		name: 'supermarket',
 		keywords: ['billa', 'merkur', 'penny', 'zielpunkt', 'spar dankt', 'hofer', 'LIDL '],
     label: {
-      de: 'Lebensmittel',
-      en: 'Groceries'
+      de: 'Supermarkt',
+      en: 'Supermarket'
     },
-    parent: 'food',
+    parent: 'food & household',
     color: '#00bcd4'
 	},
+  {
+    name: 'fast food',
+    keywords: ['MCDONALDS'],
+    label: {
+      de: 'Fast Food',
+      en: 'Fast Food'
+    },
+    parent: 'food & household',
+    color: '#00bcd4'
+  },
+  {
+    name: 'trafik',
+    keywords: ['TABAK', 'Trafik'],
+    label: {
+      de: 'Trafik',
+      en: 'Tobacconist\'s'
+    },
+    parent: 'food & household',
+    color: '#00bcd4'
+  },
   {
     name: 'education',
     keywords: ['Universität'],
@@ -177,7 +207,7 @@ var categories = [
 	},
 	{
 		name: 'fuel',
-		keywords: ['omv', 'tankstelle', 'ENI ', 'eni servicestation', ' bp ', ' JET ', ' SHELL ', ' AVANTI ', 'IQ ', 'Sprit'],
+		keywords: ['omv', 'tankstelle', 'ENI ', 'eni servicestation', ' bp ', ' JET ', ' SHELL ', ' AVANTI ', 'IQ ', 'Sprit', 'AWI'],
     label: {
       de: 'Sprit',
       en: 'Fuel'
@@ -217,7 +247,7 @@ var categories = [
   },
 	{
 		name: 'electronics',
-		keywords: ['cyberport', 'hartlauer', 'DITECH', 'SATURN', 'NIEDERMEYER '],
+		keywords: ['cyberport', 'hartlauer', 'DITECH', 'SATURN', 'NIEDERMEYER ', 'Media Markt'],
     label: {
       de: 'Elektronik',
       en: 'Electronics'
@@ -257,7 +287,7 @@ var categories = [
 	},
   {
     name: 'entertainment',
-    keywords: ['Konzert'],
+    keywords: ['Konzert', 'Kino'],
     label: {
       de: 'Unterhaltung',
       en: 'Entertainment'
@@ -277,7 +307,7 @@ var categories = [
 	},
 	{
 		name: 'taxes',
-		keywords: ['sozialvers'],
+		keywords: ['sozialvers', ' KESt '],
     label: {
       de: 'Steuern',
       en: 'Taxes'
@@ -314,10 +344,6 @@ var categories = [
     },
     parent: 'expenses',
     color: '#ffc107'
-  },
-  {
-    name: 'trafik',
-    keywords: ['TABAK', 'Trafik']
   }
 ];
 
