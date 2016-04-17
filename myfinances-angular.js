@@ -9,6 +9,7 @@ var myFinancesModule = angular.module('MyFinances', ['ngMaterial', 'ngMessages',
 myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSidenav, $mdMedia) {
   $scope.currentBalance = 0;
   $scope.csvImportConfig = konto.csvImportConfig;
+  $scope.updateCharts = updateCharts;
 
   $scope.isChromeApp = Boolean(window.chrome && chrome.app && chrome.app.runtime);
 
@@ -65,6 +66,21 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     };
     $mdDialog.show({
       templateUrl: 'templates/template-transaction-details.html',
+      clickOutsideToClose: true,
+      controller: controller,
+      targetEvent: event,
+      scope: $scope.$new(),
+      fullscreen: true
+    });
+  };
+  
+  $scope.categoryKeywordsDialog = function(categoryData, event) {
+    var controller = function($scope, $mdDialog) {
+      $scope.cancel = $mdDialog.cancel;
+      $scope.categoryData = categoryData;
+    };
+    $mdDialog.show({
+      templateUrl: 'templates/category-keywords.html',
       clickOutsideToClose: true,
       controller: controller,
       targetEvent: event,

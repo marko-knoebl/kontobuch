@@ -168,12 +168,17 @@
             <md-icon style="margin-left: 0px">list</md-icon>
             Transactions
           </md-list-item>
+          <md-list-item ng-click="active = 'categories'; toggleLeftMenu()">
+            <md-icon style="margin-left: 0px">style</md-icon>
+            Categories
+          </md-list-item>
         </md-list>
       </md-sidenav>
 
       <div style="flex-grow: 1; position: relative" ng-show="active == 'balance'" id="chart-dailybalance-container"></div>
       <div style="flex-grow: 1; position: relative" ng-show="active =='expenses'" id="chart-expenses-by-category-container"></div>
       <div ng-show="active == 'transactions'" id="transactions-table-container" ng-include="'template-transactions-table.html'" style="flex-grow: 1; overflow: auto"></div>
+      <div style="flex-grow: 1; overflow: auto" ng-show="active == 'categories'" id="category-list" ng-include="'templates/categories.html'"></div>
     </div>
 
     <script src="konto.js"></script>

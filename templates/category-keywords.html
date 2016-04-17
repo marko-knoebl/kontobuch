@@ -1,0 +1,18 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools" style="display:flex; justify-content:space-between"><h2>{{categoryData.label.en}}</h2>
+      <md-button class="md-icon-button" ng-click="updateCharts(); cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      Keywords:
+      <md-chips ng-model="categoryData.keywords"></md-chips>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

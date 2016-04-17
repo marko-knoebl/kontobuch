@@ -1,0 +1,16 @@
+<script type="text/ng-template"  id="tree_item_renderer.html">
+  <md-list-item style="padding: 4px" ng-click="categoryKeywordsDialog(data)">
+    <md-button aria-label="" class="md-icon-button" style="color: white; font-size: 24px; font-weight: normal; width: 42px; margin-right: 16px; flex-shrink: 0" ng-style="{'background-color' : categoriesByName[data.name].color}">
+        {{data.name | limitTo: 1}}
+    </md-button>
+    <span style="font-size: 16px">{{data.name}}</span>
+  </md-list-item>
+  <ul style="list-style-type: none; padding-left: 16px">
+    <li ng-repeat="data in data.children" ng-include="'tree_item_renderer.html'"></li>
+  </ul>
+</script>
+<md-list>
+  <ul style="list-style-type: none; padding-left: 0px; margin-top: 0px">
+      <li ng-repeat="data in [categoriesByName.income, categoriesByName.expenses, categoriesByName.transfers]" ng-include="'tree_item_renderer.html'"></li>
+  </ul>
+</md-list>

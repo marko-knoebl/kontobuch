@@ -325,3 +325,26 @@ var categoriesByName = {};
 categories.forEach(function(category) {
   categoriesByName[category.name] = category;
 });
+
+var mainCategories = [categoriesByName.transfers, categoriesByName.income, categoriesByName.expenses];
+
+/**
+ * Build a structure where every category has references to its children
+ */
+var addChildren = function() {
+  // initialize as an empty array
+  categories.forEach(function(category) {
+    category.children = [];
+  });
+  categories.forEach(function(category) {
+    if (category.parent) {
+      categories.forEach(function(potentialParent) {
+        if (category.parent === potentialParent.name) {
+          potentialParent.children.push(category);
+          return;
+        }
+      });
+    }
+  });
+};
+addChildren();
