@@ -123,7 +123,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
 
   $scope.categories = categories;
 
-  $scope.categoriesByName = categoriesByName;
+  $scope.categoriesByName = bankAccount.categoriesByName;
 
   copyTransactionsToAngularScope = function() {
     $scope.transactions = bankAccount.transactions;

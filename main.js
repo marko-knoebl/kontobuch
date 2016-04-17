@@ -35,23 +35,10 @@ var updateCharts = function(callback) {
 };
 
 /**
- * Create a lookup table to associate keywords with a category
- */
-var getCategoryLookupTable = function(categories) {
-  var lookupTable = {};
-  categories.forEach(function(category) {
-    category.keywords.forEach(function(keyword) {
-      lookupTable[keyword] = category.name;
-    });
-  });
-  return lookupTable;
-};
-
-/**
  * Add a "category" attribute to all transactions
  */
 var categorizeTransactions = function() {
-  var lookupTable = getCategoryLookupTable(categories);
+  var lookupTable = bankAccount.categorizationKeywords;
   for (var i = 0; i < bankAccount.transactions.length; i ++) {
     var transaction = bankAccount.transactions[i];
     for (var keyword in lookupTable) {

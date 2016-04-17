@@ -169,7 +169,6 @@ var konto = {};
       transactionSum += transaction.amount;
     });
     this.initialBalance = currentBalance - transactionSum;
-    console.log(this.initialBalance)
   };
 
   konto.BankAccount.prototype.calculateDailyBalances = function() {

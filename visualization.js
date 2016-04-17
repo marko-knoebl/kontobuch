@@ -113,7 +113,7 @@ var transactionsToExpensesByCategory = function(transactions) {
       x: category,
       // set all income to 0
       y: Math.max(-categoryTotals[category], 0),
-      color: categoriesByName[category].color
+      color: bankAccount.categoriesByName[category].color
     });
   }
   return expensesByCategoryD3;
