@@ -28,7 +28,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
       };
     };
     $mdDialog.show({
-      templateUrl: 'template-new-account-' + bank + '.html',
+      templateUrl: 'templates/new-account-' + bank + '.html',
       clickOutsideToClose: true,
       controller: controller,
       // create a new child scope of the global angular scope
@@ -50,7 +50,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
       };
     };
     $mdDialog.show({
-      templateUrl: 'template-bawagpsk-credentials.html',
+      templateUrl: 'templates/bawagpsk-credentials.html',
       clickOutsideToClose: true,
       controller: controller,
       // create ne child scope of the global angular scope
@@ -65,7 +65,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
       $scope.close = $mdDialog.cancel;
     };
     $mdDialog.show({
-      templateUrl: 'templates/template-transaction-details.html',
+      templateUrl: 'templates/transaction-details.html',
       clickOutsideToClose: true,
       controller: controller,
       targetEvent: event,
