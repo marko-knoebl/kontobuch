@@ -57,4 +57,53 @@
     }
   });
 
+  konto.BankAccount.prototype.createSampleData = function() {
+    var detailsOptions = [
+      'mcDonalds',
+      'Billa dankt',
+      'Zielpunkt dankt',
+      'Miete',
+      'Shell',
+      'OMV',
+      'Hofer',
+      'Flug',
+      'Versicherung',
+      'Subway',
+      'Strom',
+      'A1',
+      'Trafik',
+      'Ikea',
+      'Amazon',
+      'H&M',
+      'Konzert',
+      'Geschenk'
+    ];
+    var date = new Date('2015-07-02');
+    var now = new Date();
+    var id = 0;
+    var transactions = [];
+    while (date < now) {
+      if (Math.random() < 0.15) {
+        // income
+        transactions.push({
+          id: id,
+          date: date,
+          amount: Math.pow(Math.random(), 0.3) * 2000,
+          details: 'Gehalt'
+        });
+      } else {
+        transactions.push({
+          id: id,
+          date: date,
+          amount: - Math.pow(Math.random(), 5) * 1300,
+          details: detailsOptions[Math.floor(Math.random() * detailsOptions.length)]
+        });
+      }
+      var delta = Math.random() * 8;
+      date = new Date(date);
+      date.setDate(date.getDate() + delta);
+    }
+    return transactions;
+  };
+
 })();
