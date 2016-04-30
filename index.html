@@ -126,7 +126,7 @@
         </md-toolbar>
       </div>
 
-      <div style="display: flex; flex-direction: row; align-items: stretch; flex-grow: 1">
+      <div style="display: flex; flex-direction: row; align-items: stretch; flex-grow: 1; /*prevents slowdown on firefox (probably related to vs-repeat*/ min-height: 50%">
         <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-10dp" md-is-locked-open="$mdMedia('gt-sm')">
           <div style="font-size: 24px; margin-left: 16px; margin-top: 16px">
             Kontobuch
