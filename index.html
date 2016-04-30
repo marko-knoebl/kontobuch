@@ -102,31 +102,32 @@
     </style>
 
     <div id="charts" style="height:100%; flex-direction: column; overflow: auto; display: flex">
-
-      <md-toolbar class="md-whiteframe-4dp" style="display: flex; flex-shrink: 0">
-        <div class="md-toolbar-tools" style="height: auto; max-height: none; min-height: 64px">
-          <md-button class="md-icon-button" ng-click="toggleLeftMenu()">
-            <md-icon>menu</md-icon>
-          </md-button>
-          <div ng-show="active == 'transactions'" style="font-size: 14px">
-            <md-input-container style="max-width: 240px; margin-left: 24px; margin-top: 15px; margin-bottom: 15px">
-              <label>Sort by</label>
-              <md-select ng-model="query.order">
-                <md-option ng-repeat="option in [['-date', 'Date (newest first)'], ['date', 'Date (oldest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
-                  {{option[1]}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <div style="clear: both"></div>
+      <div hide-gt-sm> <!-- using hide-gt-xs does not work on an element with style:display set-->
+        <md-toolbar class="md-whiteframe-4dp" style="display: flex; flex-shrink: 0" hide-gt-sm>
+          <div class="md-toolbar-tools" style="height: auto; max-height: none; min-height: 64px">
+            <md-button class="md-icon-button" ng-click="toggleLeftMenu()">
+              <md-icon>menu</md-icon>
+            </md-button>
+            <div ng-show="active == 'transactions'" style="font-size: 14px">
+              <md-input-container style="max-width: 240px; margin-left: 24px; margin-top: 15px; margin-bottom: 15px">
+                <label>Sort by</label>
+                <md-select ng-model="query.order">
+                  <md-option ng-repeat="option in [['-date', 'Date (newest first)'], ['date', 'Date (oldest first)'], ['category', 'Category'], ['amount', 'Amount (increasing)'], ['-amount', 'Amount (decreasing)']]" value="{{option[0]}}">
+                    {{option[1]}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <div style="clear: both"></div>
+            </div>
+            <div ng-show="active != 'transactions'" style="margin-left: 18px; text-transform: capitalize">
+              {{active}}
+            </div>
           </div>
-          <div ng-show="active != 'transactions'" style="margin-left: 18px; text-transform: capitalize">
-            {{active}}
-          </div>
-        </div>
-      </md-toolbar>
+        </md-toolbar>
+      </div>
 
       <div style="display: flex; flex-direction: row; align-items: stretch; flex-grow: 1">
-        <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-10dp" md-is-locked-open="$mdMedia('gt-md')">
+        <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-10dp" md-is-locked-open="$mdMedia('gt-sm')">
           <div style="font-size: 24px; margin-left: 16px; margin-top: 16px">
             Kontobuch
           </div>
