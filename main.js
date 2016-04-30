@@ -27,31 +27,11 @@ var getCsvFileContent = function(bankName, callback) {
  */
 var updateCharts = function(callback) {
   bankAccount.calculateDailyBalances();
-  categorizeTransactions();
+  bankAccount.categorizeTransactions();
   copyTransactionsToAngularScope();
   drawChart('dailyBalance');
   drawChart('expensesByCategory');
   if(callback) {callback()};
-};
-
-/**
- * Add a "category" attribute to all transactions
- */
-var categorizeTransactions = function() {
-  var lookupTable = bankAccount.categorizationKeywords;
-  for (var i = 0; i < bankAccount.transactions.length; i ++) {
-    var transaction = bankAccount.transactions[i];
-    for (var keyword in lookupTable) {
-      var regex = new RegExp(keyword, 'i');
-      if (transaction.details.search(regex) > -1) {
-        transaction.category = lookupTable[keyword];
-        break;
-      }
-    }
-    if (transaction.category === undefined) {
-      transaction.category = transaction.amount > 0 ? 'income' : 'expenses';
-    }
-  }
 };
 
 /**

@@ -62,7 +62,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
 
   $scope.transactionDetailsDialog = function(event) {
     var controller = function($scope, $mdDialog) {
-      $scope.cancel = $mdDialog.cancel;
+      $scope.close = $mdDialog.cancel;
     };
     $mdDialog.show({
       templateUrl: 'templates/template-transaction-details.html',
