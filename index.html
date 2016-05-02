@@ -101,8 +101,9 @@
       }
     </style>
 
-    <div id="charts" style="height:100%; flex-direction: column; overflow: auto; display: flex">
-      <div hide-gt-sm> <!-- using hide-gt-xs does not work on an element with style:display set-->
+    <div style="height:100%; flex-direction: column; overflow: auto; display: flex">
+      <!-- top bar -->
+      <div hide-gt-sm> <!-- using hide-gt-sm does not work directly on an element with style:display set-->
         <md-toolbar class="md-whiteframe-4dp" style="display: flex; flex-shrink: 0" hide-gt-sm>
           <div class="md-toolbar-tools" style="height: auto; max-height: none; min-height: 64px">
             <md-button class="md-icon-button" ng-click="toggleLeftMenu()">
@@ -177,6 +178,10 @@
                   </md-menu-item>
                 </md-menu-content>
               </md-menu>
+            </md-list-item>
+            <md-list-item ng-click="aboutDialog(); toggleLeftMenu()">
+              <md-icon style="margin-left: 0px">info</md-icon>
+              About
             </md-list-item>
           </md-list>
         </md-sidenav>

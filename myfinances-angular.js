@@ -92,6 +92,19 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     });
   };
 
+  $scope.aboutDialog = function(event) {
+    var controller = function($scope, $mdDialog) {
+      $scope.close = $mdDialog.cancel;
+    };
+    $mdDialog.show({
+      templateUrl: 'templates/about-dialog.html',
+      clickOutsideToClose: true,
+      controller: controller,
+      targetEvent: event,
+      fullscreen: true
+    })
+  };
+
   $scope.transactionTableSelectionId = 23;
 
   $scope.toggleLeftMenu = function() {
