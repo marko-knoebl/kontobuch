@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-    <title>Personal Finance Chart</title>
+    <title>Kontobuch</title>
     <script src="bower_components/papaparse/papaparse.js"></script>
     <script src="categories.js"></script>
     <script src="get-bawagpsk-statement.js"></script>
@@ -181,6 +181,19 @@
           </md-list>
         </md-sidenav>
 
+        <div style="flex-grow: 1; position: relative; margin-left: 64px; margin-top: 16px; margin-right: 32px" ng-show="active == 'startpage'" id="startpage">
+          <h1 style="font-size: 45px; margin-top: 8px; color: #777777">Kontobuch</h1>
+          <div style="color: #7777777; font-size: 16px">
+            <div style="margin-bottom: 40px">
+              <p>Monitor spending and income of your Austrian bank account</p>
+              <p>Import data from Bawag PSK, Raiffeisen, hellobank or PayPal</p>
+            </div>
+            <div style="margin-bottom: 40px">
+              <p>Select <b>Load account</b> to get started!</p>
+            </div>
+            <p style="font-size: 14px; color: #999999">This is an ealy beta version. See <b>About</b> to send feedback</p>
+          </div>
+        </div>
         <div style="flex-grow: 1; position: relative" ng-show="active == 'balance'" id="chart-dailybalance-container"></div>
         <div style="flex-grow: 1; position: relative" ng-show="active =='expenses'" id="chart-expenses-by-category-container"></div>
         <div ng-show="active == 'transactions'" id="transactions-table-container" ng-include="'templates/transactions-table.html'" style="flex-grow: 1; overflow: auto"></div>

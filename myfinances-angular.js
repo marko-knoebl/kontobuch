@@ -13,6 +13,8 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
 
   $scope.isChromeApp = Boolean(window.chrome && chrome.app && chrome.app.runtime);
 
+  $scope.active = 'startpage';
+
   $scope.showNewAccountDialog = function(event, bank) {
     // create a new controller corresponding to the selected bank
     var controller = function($scope, $mdDialog) {
@@ -22,6 +24,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
         getCsvFileContent(bank, function(csvContent) {
           bankAccount.importCsv(csvContent, bank);
           bankAccount.setCurrentBalance($scope.currentBalance);
+          $scope.$parent.active = 'balance';
           updateCharts($mdDialog.hide);
         });
         //$scope.$parent.currentBalance = data.currentBalance;
@@ -112,9 +115,6 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     });
   };
 
-  $scope.active = 'balance';
-
-
   // data belonging to the table
   $scope.selected = [];
 
@@ -143,11 +143,11 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
     $scope.transactions = bankAccount.transactions;
   };
 
-
   $scope.loadSampleData = function() {
     var sampleData = bankAccount.createSampleData();
     bankAccount.loadTransactionData(sampleData);
     bankAccount.setCurrentBalance(3300);
+    $scope.active = 'balance';
     updateCharts();
   };
 });
