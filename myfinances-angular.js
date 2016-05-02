@@ -92,13 +92,23 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
   $scope.transactionTableSelectionId = 23;
 
   $scope.toggleLeftMenu = function() {
-    $mdSidenav('left').toggle().then(function() {
+    var safeUpdate = function() {
       if (chartData__.expensesByCategory.chart) {
         chartData__.expensesByCategory.chart.update();
       }
       if (chartData__.dailyBalance.chart) {
         chartData__.dailyBalance.chart.update();
       }
+    };
+    // resize newly displayed charts (if we do it immediately they
+    //  will shrink to minimal size)
+    setTimeout(function() {
+      safeUpdate();
+    }, 10)
+    $mdSidenav('left').toggle().then(function() {
+      // redraw again as the first resize will sometimes produce a chart
+      //  that's too small
+      safeUpdate();
     });
   };
 
