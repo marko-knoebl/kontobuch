@@ -102,6 +102,7 @@
       var delta = Math.random() * 8;
       date = new Date(date);
       date.setDate(date.getDate() + delta);
+      id ++;
     }
     return transactions;
   };
