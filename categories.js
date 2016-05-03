@@ -127,17 +127,17 @@ var categories = [
   },
 	{
 		name: 'furniture',
-		keywords: ['wohnung', 'obi bau', 'mobelix', 'ikea', 'kika', 'xxxlutz'],
+		keywords: ['wohnung', 'obi bau', 'mobelix', 'ikea', 'kika', 'xxxlutz', 'BAUHAUS'],
     label: {
-      de: 'Möbel (Wohnungsausstattung)',
-      en: 'Furniture'
+      de: 'Möbel (Wohnungsausstattung) & Heimwerken',
+      en: 'Furniture & DIY'
     },
     parent: 'housing',
     color: '#2196f3'
 	},
   {
     name: 'food & household',
-    keywords: [],
+    keywords: ['LIBRO'],
     label: {
       de: 'Lebensmittel und Haushalt',
       en: 'Food and Household'
@@ -147,7 +147,7 @@ var categories = [
   },
 	{
 		name: 'supermarket',
-		keywords: ['billa', 'merkur', 'penny', 'zielpunkt', 'spar dankt', 'hofer', 'LIDL '],
+		keywords: ['billa', 'merkur', 'penny', 'zielpunkt', 'spar dankt', 'hofer', 'LIDL ', ' REWE '],
     label: {
       de: 'Supermarkt',
       en: 'Supermarket'
@@ -157,10 +157,20 @@ var categories = [
 	},
   {
     name: 'fast food',
-    keywords: ['MCDONALDS'],
+    keywords: ['MCDONALDS', 'Subway Sandwich Store'],
     label: {
       de: 'Fast Food',
       en: 'Fast Food'
+    },
+    parent: 'food & household',
+    color: '#00bcd4'
+  },
+  {
+    name: 'restaurant',
+    keywords: [' VAPIANO '],
+    label: {
+      de: 'Restaurant',
+      en: 'Restaurant'
     },
     parent: 'food & household',
     color: '#00bcd4'
@@ -187,7 +197,7 @@ var categories = [
   },
 	{
 		name: 'transportation',
-		keywords: ['oebb', 'wr.linien', 'Wiener Linien', 'WR. LINIEN', 'db bahn', 'ÖBB-Personenverkehr'],
+		keywords: ['oebb', 'wr.linien', 'Wiener Linien', 'WR. LINIEN', 'LINZ LINIEN', 'db bahn', 'ÖBB-Personenverkehr', 'Flixbus'],
     label: {
       de: 'Verkehr',
       en: 'Transportation'
@@ -207,7 +217,7 @@ var categories = [
 	},
 	{
 		name: 'fuel',
-		keywords: ['omv', 'tankstelle', 'ENI ', 'eni servicestation', ' bp ', ' JET ', ' SHELL ', ' AVANTI ', 'IQ ', 'Sprit', 'AWI'],
+		keywords: ['omv', 'tankstelle', 'ENI ', 'eni servicestation', ' bp ', ' JET ', ' SHELL ', ' AVANTI ', 'IQ ', 'Sprit', 'AWI', 'MOL '],
     label: {
       de: 'Sprit',
       en: 'Fuel'
@@ -217,7 +227,7 @@ var categories = [
 	},
 	{
 		name: 'phone',
-		keywords: ['telekom austria', 'Hutchison Drei', 'HOT Telekom'],
+		keywords: ['telekom austria', 'Hutchison Drei', 'HOT Telekom', ' Bob'],
     label: {
       de: 'Tele&shy;kommuni&shy;kation',
       en: 'Phone'
@@ -297,7 +307,7 @@ var categories = [
   },
 	{
 		name: 'travel',
-		keywords: ['urlaub', 'flüge'],
+		keywords: ['urlaub', 'flüge', 'hostel ', 'Flugticket'],
     label: {
       de: 'Reisen',
       en: 'Travel'
@@ -327,7 +337,7 @@ var categories = [
 	},
 	{
 		name: 'gifts',
-		keywords: ['Geburtstagsgeschenk'],
+		keywords: ['Geburtstagsgeschenk', 'Geschenk'],
     label: {
       de: 'Geschenke',
       en: 'Gifts'
