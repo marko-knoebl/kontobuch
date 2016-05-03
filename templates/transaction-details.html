@@ -1,4 +1,4 @@
-<md-dialog style="max-width: 500px">
+<md-dialog style="max-width: 300px">
   <md-toolbar>
     <div class="md-toolbar-tools" style="display:flex; justify-content:space-between"><h2>Transaction details</h2>
       <md-button class="md-icon-button" ng-click="updateCharts(); close()">
@@ -11,7 +11,7 @@
       <div style="padding-bottom: 16px">
         {{transactions[transactionTableSelectionId].details}}
       </div>
-      <md-input-container class="md-block" style="padding-left: 0px; padding-right: 0px; margin-bottom: 8px">
+      <md-input-container class="md-block" style="padding-left: 0px; padding-right: 0px; margin-bottom: 0px">
         <label>Category</label>
         <md-select ng-model="transactions[transactionTableSelectionId].category">
           <md-option ng-repeat="category in categories | orderBy: 'name'" value="{{category.name}}">
@@ -19,6 +19,7 @@
           </md-option>
         </md-select>
       </md-input-container>
+      <div style="color: red; font-size: 12px">Not functional for now - use the categories page to assign keywords</div>
       <div style="display: flex; flex-direction: row; padding-top: 16px; font-size: 16px">
         <div style="width: 96px; flex-grow: 1">{{transactions[transactionTableSelectionId].date | date:'yyyy-MM-dd'}}</div>
         <div style="text-align: right; width: 96px; flex-grow: 1" ng-class="{'transaction-positive': transactions[transactionTableSelectionId].amount>0, 'transaction-negative': transactions[transactionTableSelectionId].amount<0}">{{transactions[transactionTableSelectionId].amount | number: 2}}</div>
