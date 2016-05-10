@@ -103,7 +103,7 @@
 
     <div style="height:100%; flex-direction: column; overflow: auto; display: flex">
       <!-- top bar -->
-      <div hide-gt-sm> <!-- using hide-gt-sm does not work directly on an element with style:display set-->
+      <div hide-gt-sm style="flex-shrink: 0"> <!-- using hide-gt-sm does not work directly on an element with style:display set-->
         <md-toolbar class="md-whiteframe-4dp" style="display: flex; flex-shrink: 0" hide-gt-sm>
           <div class="md-toolbar-tools" style="height: auto; max-height: none; min-height: 64px">
             <md-button class="md-icon-button" ng-click="toggleLeftMenu()">
