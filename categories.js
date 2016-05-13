@@ -27,7 +27,7 @@ var categories = [
 	},
 	{
 		name: 'investment',
-		keywords: ['Fondsgebundene Lebensversicherung'],
+		keywords: ['Fondsgebundene Lebensversicherung', 'Investmentdepot'],
     label: {
       de: 'Anlage',
       en: 'Investment'
@@ -317,7 +317,7 @@ var categories = [
 	},
 	{
 		name: 'taxes',
-		keywords: ['sozialvers', ' KESt '],
+		keywords: ['sozialvers', ' KESt ', 'Finanzamt'],
     label: {
       de: 'Steuern',
       en: 'Taxes'
