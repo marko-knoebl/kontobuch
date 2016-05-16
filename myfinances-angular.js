@@ -48,6 +48,7 @@ myFinancesModule.controller('MyFinancesCtrl', function($scope, $mdDialog, $mdSid
         getBawagpskAccountData($scope.login, $scope.password, function(accountData) {
           bankAccount.importCsv(accountData.csvString, 'bawagpsk');
           bankAccount.setCurrentBalance(accountData.currentBalance);
+          $scope.$parent.active = 'balance';
           updateCharts($mdDialog.hide);
         });
       };

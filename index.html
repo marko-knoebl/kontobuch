@@ -156,18 +156,18 @@
                   Load Account
                 </md-list-item>
                 <md-menu-content>
-                  <!--TODO: don't hard-code banknames-->
-                  <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'hellobank', 'paypal']">
-                    <md-button ng-click="showNewAccountDialog($event, bankname); toggleLeftMenu()">
-                      <md-icon md-menu-align-target>add</md-icon>
-                      {{csvImportConfig[bankname].name}}
-                    </md-button>
-                  </md-menu-item>
                   <!-- display direct Bawag import if this is running as a  Chrome app-->
                   <md-menu-item ng-if="isChromeApp">
                     <md-button ng-click="showBawagpskCredentialsDialog($event); toggleLeftMenu()">
                       <md-icon md-menu-align-target>add</md-icon>
                       Bawag PSK (direct)
+                    </md-button>
+                  </md-menu-item>
+                  <!--TODO: don't hard-code banknames-->
+                  <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'hellobank', 'paypal']">
+                    <md-button ng-click="showNewAccountDialog($event, bankname); toggleLeftMenu()">
+                      <md-icon md-menu-align-target>add</md-icon>
+                      {{csvImportConfig[bankname].name}}
                     </md-button>
                   </md-menu-item>
                   <md-menu-item>

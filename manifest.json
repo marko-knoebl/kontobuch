@@ -9,7 +9,13 @@
   "name": "Kontobuch",
   "version": "0.1",
 
-  "description": "Track your expenses",
+  "description": "Track expenses and income of your Austrian bank account",
+  "icons": {
+    "24": "icons/kontobuch-icon-24.png",
+    "48": "icons/kontobuch-icon-48.png",
+    "128": "icons/kontobuch-icon-128.png",
+    "32": "icons/kontobuch-icon-32.png"
+  },
 
   "permissions": [
     "https://ebanking.bawagpsk.com/"
