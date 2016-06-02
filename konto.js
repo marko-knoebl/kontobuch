@@ -52,6 +52,17 @@ var konto = {};
       detailsKey: ' Name',
       //otherParty: 3,
       reverse: true
+    },
+    easybank: {
+      name: 'easybank',
+      encoding: 'ISO-8859-1',
+      delimiter: ';',
+      header: false,
+      dateKey: 2,
+      dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+      amountKey: 4,
+      detailsKey: 1,
+      reverse: true
     }
   };
 
