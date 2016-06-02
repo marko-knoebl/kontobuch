@@ -14,7 +14,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="kontobuch-icon.svg">
+   sodipodi:docname="kontobuch-icon.svg"
+   inkscape:export-filename="/home/marko/docs/dev/finances-kontobuch/icons/kontobuch-icon-48.png"
+   inkscape:export-xdpi="60.959999"
+   inkscape:export-ydpi="60.959999">
   <defs
      id="defs4">
     <filter
@@ -33,7 +36,7 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
+     inkscape:zoom="3.959798"
      inkscape:cx="35.65593"
      inkscape:cy="38.332549"
      inkscape:document-units="px"
