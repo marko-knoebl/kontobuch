@@ -1,0 +1,33 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools" style="display:flex; justify-content:space-between"><h2>New Bawag easybank account</h2>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <div>
+        <p>We will now import your financial data from Erste Bank.</p>
+      </div>
+      <div>
+        Enter your current account balance (Kontostand):<br>
+        <md-input-container style="margin-bottom:0px">
+          <label>Current Balance</label>
+          <input type="number" ng-model="currentBalance"/>
+        </md-input-container>
+      </div>
+      <div>
+        <p>
+          Now, export your account data as a CSV file. In order to do this, select "Umsatz suchen", enter the desired timeframe and select "CSV (Strichpunkt getrennt)" as the file format.
+        </p>
+        <p>Then upload the CSV file below:</p>
+        <input type="file" id="file-input" style="margin-top:16px">
+      </div>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="processOKClicked()" class="md-raised md-primary">OK</md-button>
+  </md-dialog-actions>
+</md-dialog>

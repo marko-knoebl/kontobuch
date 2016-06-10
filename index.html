@@ -164,7 +164,7 @@
                     </md-button>
                   </md-menu-item>
                   <!--TODO: don't hard-code banknames-->
-                  <md-menu-item ng-repeat="bankname in ['bawagpsk', 'raiffeisen', 'easybank', 'hellobank', 'paypal']">
+                  <md-menu-item ng-repeat="bankname in ['bawagpsk', 'erstebank', 'raiffeisen', 'easybank', 'number26', 'hellobank', 'paypal']">
                     <md-button ng-click="showNewAccountDialog($event, bankname); toggleLeftMenu()">
                       <md-icon md-menu-align-target>add</md-icon>
                       {{csvImportConfig[bankname].name}}

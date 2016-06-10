@@ -21,15 +21,31 @@ var konto = {};
       detailsNormalizer: function(details) {return details.replace(/  +/g, ' ');},
       reverse: true
     },
-    raiffeisen: {
-      name: 'Raiffeisen',
+    easybank: {
+      name: 'easybank',
       encoding: 'ISO-8859-1',
       delimiter: ';',
       header: false,
-      dateKey: 0,
+      dateKey: 2,
       dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-      amountKey: 3,
-      detailsKey: 1
+      amountKey: 4,
+      detailsKey: 1,
+      reverse: true
+    },
+    erstebank: {
+      name: 'Erste Bank',
+      encoding: 'ISO-8859-1',
+      delimiter: ';',
+      header: true,
+      dateKey: 'Buchungsdatum',
+      dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
+      amountKey: 'Betrag',
+      detailsKey: 'Bezeichnung',
+      reverse: true,
+      preprocessor: function(csvString) {
+        // remove last line
+        return csvString.substring(0, csvString.lastIndexOf('\n', csvString.length-2));
+      }
     },
     hellobank: {
       name: 'Hello Bank',
@@ -40,6 +56,15 @@ var konto = {};
       amountKey: 'Betrag',
       detailsKey: 'Umsatztext',
       reverse: true
+    },
+    number26: {
+      name: 'Number26',
+      encoding: 'ISO-8859-1',
+      delimiter: ',',
+      header: true,
+      dateKey: 'Datum',
+      amountKey: 'Betrag (EUR)',
+      detailsKey: 'Empfänger',
     },
     paypal: {
       name: 'PayPal',
@@ -53,16 +78,15 @@ var konto = {};
       //otherParty: 3,
       reverse: true
     },
-    easybank: {
-      name: 'easybank',
+    raiffeisen: {
+      name: 'Raiffeisen',
       encoding: 'ISO-8859-1',
       delimiter: ';',
       header: false,
-      dateKey: 2,
+      dateKey: 0,
       dateNormalizer: function(date) {return date.split('.').reverse().join('-');},
-      amountKey: 4,
-      detailsKey: 1,
-      reverse: true
+      amountKey: 3,
+      detailsKey: 1
     }
   };
 
@@ -89,7 +113,12 @@ var konto = {};
         throw 'invalid input: date'
       }
       date = new Date(date + 'T00:00:00');
-      var amount = parseFloat(item[config.amountKey].replace('.', '').replace(',', '.'));
+      if (item[config.amountKey].indexOf(',') !== -1) {
+        var amount = parseFloat(item[config.amountKey].replace('.', '').replace(',', '.'));
+      } else {
+        // number26
+        var amount = parseFloat(item[config.amountKey]);
+      }
       var details = item[config.detailsKey];
       if (config.detailsNormalizer) {
         details = config.detailsNormalizer(details);
@@ -144,6 +173,9 @@ var konto = {};
       }
       config = konto.csvImportConfig[config];
       config.skipEmptyLines = true;
+    }
+    if (config.preprocessor) {
+      csvString = config.preprocessor(csvString);
     }
     var transactions = Papa.parse(csvString, config).data;
     this.transactions = prepareTransactionData(transactions, config);
